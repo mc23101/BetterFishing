@@ -1,0 +1,44 @@
+fish:
+  # 样例鱼1
+  TestFish1:
+    # 钓鱼掉落物的显示标签
+    displayName: "测试鱼1"
+    # 鱼的稀有度
+    rarity: Common
+    # 鱼的材质信息
+    item:
+      material: CHEST
+    lore:
+      - "第一行Lore"
+      - "第二行Lore"
+      - "第三行Lore"
+    durability: 1
+    eat-event:
+      - "COMMAND:fly"
+    interact-event:
+      - "COMMAND:AAA"
+    effect: "effect"
+    glowing: true
+    size:
+      maxSize: 20.1
+      minSize: 15.1
+
+  TestFish2:
+    # 钓鱼掉落物的显示标签
+    displayName: "测试鱼2"
+    rarity: Common
+    weight: 20
+    item:
+      material: CHEST
+    lore:
+      - "第一行Lore"
+      - "第二行Lore"
+      - "第三行Lore"
+    durability: 1
+    eat-event: "eatEvent"
+    effect: "effect"
+    interact-event: "interact-event"
+    glowing: true
+    size:
+      maxSize: 20.1
+      minSize: 15.1
