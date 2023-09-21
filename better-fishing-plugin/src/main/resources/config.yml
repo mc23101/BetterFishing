@@ -1,0 +1,24 @@
+# 在钓鱼的过程中，鱼的出现等待时间
+fishing:
+  maxWaitTime: 600
+  minWaitTime: 200
+
+
+# MySQL数据库的配置:
+mysql:
+  # 使用MYSQL数据库
+  use-mysql: false
+  # 数据库地址(默认情况下自动添加3306端口，如果不相同，使用address:port指定)
+  address: localhost
+  # 数据库名称
+  database: evenmorefish
+  # 登录信息
+  username: root
+  password: ''
+
+# When dropping tool items (e.g. fishing rod) should they be dropped with a random durability
+# instead of always full durability?
+random-durability: true
+
+# 关闭经济核心，关闭此项将会导致部分功能不可用
+enable-economy: true

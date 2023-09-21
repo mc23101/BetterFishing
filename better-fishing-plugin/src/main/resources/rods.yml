@@ -1,0 +1,12 @@
+test:
+  display: "测试鱼竿"
+  lore:
+    - "这是一个测试行"
+    - "这是一个测试行"
+    - "这是一个测试行"
+    - "这是一个测试行"
+  fishing-speed: 0.9
+  double-drop: 0.9
+  rarities:
+    common: 30
+  extra-fish: fish1
