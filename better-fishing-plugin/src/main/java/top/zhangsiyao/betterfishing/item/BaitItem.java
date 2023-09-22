@@ -1,13 +1,16 @@
 package top.zhangsiyao.betterfishing.item;
 
-import com.gmail.nossr50.datatypes.treasure.Rarity;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
-import top.zhangsiyao.betterfishing.exceptions.InvalidFishException;
-import top.zhangsiyao.betterfishing.reward.Reward;
+import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
+import top.zhangsiyao.betterfishing.utils.ColorUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
@@ -62,6 +65,39 @@ public class BaitItem implements AbstractItem{
         itemFactory=new ItemFactory(this,file);
     }
 
+    public String getDisplayName() {
+        return ColorUtils.translateHexColorCodes(displayName==null?baitName:displayName);
+    }
+
+    public List<String> getLore() {
+        List<String> cur=new ArrayList<>();
+        for (String l:lore){
+            cur.add(ColorUtils.translateHexColorCodes(l));
+        }
+        return cur;
+    }
+
+    public ItemStack give(Player player, int randomIndex) {
+        ItemStack bait = itemFactory.createItem(player, randomIndex);
+
+        ItemMeta baitMeta;
+
+        if ((baitMeta = bait.getItemMeta()) != null) {
+            if (displayName != null) baitMeta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
+            else baitMeta.setDisplayName(ColorUtils.translateHexColorCodes(getBaitName()));
+
+            baitMeta.setLore(getLore());
+
+            baitMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+            baitMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            baitMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+            bait.setItemMeta(baitMeta);
+            bait = BFWorthNBT.setBaitNBT(bait,this);
+        }
+        return bait;
+    }
+
     private ConfigurationSection getSection(){
         return baitConfig.getConfigurationSection("baits."+baitName);
     }
@@ -83,7 +119,7 @@ public class BaitItem implements AbstractItem{
     }
 
     private void loadDurability(){
-        durability=getSection().getInt("durability");
+        durability=getSection().getInt("durability",0);
     }
 
     private void loadFish(){
@@ -116,6 +152,13 @@ public class BaitItem implements AbstractItem{
                 throw new RuntimeException(file.getPath()+"中的"+baitName+"rarity："+rarityName+"该稀有度不存在");
             }
         }
+        rarity=rarities;
     }
 
+    @Override
+    public String toString() {
+        return "BaitItem{" +
+                ", rarity=" + rarity +
+                '}';
+    }
 }

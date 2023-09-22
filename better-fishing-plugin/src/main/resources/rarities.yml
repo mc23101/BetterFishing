@@ -1,52 +1,18 @@
-
 rarities:
-  # ▼ All rarity names should start on the same column as this down arrow.
+  # 稀有度的名称
   Common:
-    # How likely is the rarity to be chosen? Having a greater weight means the rarity is more likely to be chosen (the total weights don't have to add to 100)
+    # 稀有度的权重
     weight: 100
-    # What colour should the fish's name be?
+    # 稀有度的名称颜色
     colour: '&7'
-    # Prices in /emf shop are calculated by using the calculation "length * worth-multiplier". You can change the worth-multiplier here.
+    # 商店出售的权重，出售价格=worth*multiplier*point
     worth-multiplier: 0.1
-    # Should a catch of this fish be broadcasted to everyone (true) or just the fisher (false)?
+    # 当钓到当前稀有度的"鱼"时，是否全服播报
     broadcast: false
-    # Change the sizing ranges of the fish.
-    size:
-      # Absolute minimum size the fish can be, this must be an integer
-      minSize: 1
-      # Absolute maximum size the fish can be, this must be an integer
+    # 当先稀有度的默认随机积分范围，与出售价格和比赛排名有关
+    # 当"鱼"指定了这个最大值和最小数，则优先使用"鱼"的积分范围
+    point:
+      # 最小积分
+      min: 1
+      # 最大积分
       maxSize: 30
-  Junk:
-    weight: 5
-    colour: '&#888888'
-    worth-multiplier: 0.2
-    broadcast: false
-    size:
-      minSize: 15
-      maxSize: 45
-  Rare:
-    weight: 10
-    colour: '&b'
-    worth-multiplier: 0.2
-    broadcast: false
-    size:
-      minSize: 20
-      maxSize: 150
-  Epic:
-    weight: 3
-    colour: '&d'
-    worth-multiplier: 0.15
-    broadcast: true
-    size:
-      minSize: 125
-      maxSize: 800
-  Legendary:
-    weight: 1
-    colour: '&6'
-    worth-multiplier: 0.2
-    broadcast: true
-    size:
-      minSize: 800
-      maxSize: 4000
-
-# You can add/rename/remove as many rarities as you want.

@@ -1,12 +1,23 @@
-test:
-  display: "测试鱼竿"
-  lore:
-    - "这是一个测试行"
-    - "这是一个测试行"
-    - "这是一个测试行"
-    - "这是一个测试行"
-  fishing-speed: 0.9
-  double-drop: 0.9
-  rarities:
-    common: 30
-  extra-fish: fish1
+rods:
+  # 鱼竿的名称
+  test:
+    # 鱼竿的显示标签
+    displayName: "&l&c超级无敌大鱼竿"
+    # 鱼竿的lore
+    lore:
+      - "&b&l这是一个超级厉害的鱼竿"
+      - "&b&l它可以极大减少钓鱼的周期"
+      - "&b&l它有非常大的概率获取双倍奖励"
+      - "&b&l总之，它就是很厉害"
+    # 鱼竿的钓鱼速度，该值越大，钓鱼的速度越快
+    fishing-speed: 0.9
+    # 双倍奖励的概率
+    double-drop: 0.9
+    # 鱼竿是否发光(无属性附魔)
+    glowing: true
+    # 指定稀有度的增加权重，稀有度必须在rarities.yml中有定义，否则会报错
+    # 该项可配置多个，格式为  稀有度：权重
+    rarities:
+      common: 30
+    # 该鱼竿的额外掉落物，在extrafish目录中配置，名字为文件内部的 name属性
+    extra-fish: fish1

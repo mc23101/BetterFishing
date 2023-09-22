@@ -71,8 +71,6 @@ public class FishFile {
         }
         for(File file: Objects.requireNonNull(dir.listFiles())){
 
-            System.out.println(file.getPath());
-
             FileConfiguration fileConfiguration=new YamlConfiguration();
             fileConfiguration.load(file);
 
@@ -100,7 +98,6 @@ public class FishFile {
                     map.put(fishItem.getRarity(),new ArrayList<>(Collections.singletonList(fishItem)));
                 }
             }
-            System.out.println(name);
             BetterFishing.extraRarityFishes.put(name,map);
         }
     }

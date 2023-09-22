@@ -23,7 +23,6 @@ public class FishInteractEvent implements Listener {
         FishItem fish = FishUtils.getFish(event.getItem());
         if (fish != null) {
             if (fish.getInteractRewards().size()>0) {
-                System.out.println("测试测试测试");
                 event.setCancelled(true);
                 ItemStack itemInHand = event.getItem();
                 event.getPlayer().getInventory().getItemInMainHand().setAmount(itemInHand.getAmount() - 1);

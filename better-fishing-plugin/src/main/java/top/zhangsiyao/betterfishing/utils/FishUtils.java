@@ -9,25 +9,25 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
 import top.zhangsiyao.betterfishing.item.BaitItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
 import top.zhangsiyao.betterfishing.item.Rod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FishUtils {
 
-    private static final Pattern HEX_PATTERN = Pattern.compile("&#" + "([A-Fa-f0-9]{6})");
-    private static final char COLOR_CHAR = '\u00A7';
+
 
 
     public static Rod getRod(ItemStack stack){
@@ -45,6 +45,15 @@ public class FishUtils {
 
     public static boolean useBait(ItemStack itemStack){
         NBTItem nbtItem=new NBTItem(itemStack);
+        if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.USE_BAIT_NAME)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public static boolean isBait(ItemStack itemStack){
+        NBTItem nbtItem=new NBTItem(itemStack);
         if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME)){
             return false;
         }else {
@@ -52,13 +61,58 @@ public class FishUtils {
         }
     }
 
-    public static BaitItem getBait(ItemStack itemStack){
-        NBTItem nbtItem=new NBTItem(itemStack);
-        if(!useBait(itemStack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME))){
+    public static BaitItem getBait(ItemStack baitItemstack){
+        NBTItem nbtItem=new NBTItem(baitItemstack);
+        if(!isBait(baitItemstack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME))){
             return null;
         }else {
             return BetterFishing.baitMap.get(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME));
         }
+    }
+
+    public static BaitItem getBaitByRod(ItemStack rodItemStack){
+        NBTItem nbtItem=new NBTItem(rodItemStack);
+        if(!useBait(rodItemStack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.USE_BAIT_NAME))){
+            return null;
+        }else {
+            return BetterFishing.baitMap.get(NbtUtils.getString(nbtItem,NbtConstant.USE_BAIT_NAME));
+        }
+    }
+
+
+    public static void refreshRodLore(ItemStack itemStack){
+        Rod rod=getRod(itemStack);
+        if(rod==null){
+            return;
+        }
+        List<String> lore=new ArrayList<>(rod.getLore());
+        BaitItem baitItem=getBaitByRod(itemStack);
+        if(baitItem!=null){
+            lore.add(BetterFishing.messageConfig.getRodBaitSlot(baitItem.getDisplayName()));
+        }else {
+            lore.add(BetterFishing.messageConfig.getRodBaitSlot("无"));
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            itemMeta.setLore(lore);
+        }
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public static boolean decreaseBait(Player player,String baitName){
+        for (ItemStack itemStack : player.getInventory()) {
+           if(itemStack!=null){
+              NBTItem nbtItem=new NBTItem(itemStack);
+              if(NbtUtils.hasKey(nbtItem,NbtConstant.BF_BAIT_NAME)){
+                  String name=NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME);
+                  if(name!=null&&name.equals(baitName)){
+                      itemStack.setAmount(itemStack.getAmount()-1);
+                      return true;
+                  }
+              }
+           }
+        }
+        return false;
     }
 
 
@@ -139,17 +193,4 @@ public class FishUtils {
         }
     }
 
-    public static String translateHexColorCodes(String message) {
-        Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            matcher.appendReplacement(buffer, COLOR_CHAR + "x"
-                    + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1)
-                    + COLOR_CHAR + group.charAt(2) + COLOR_CHAR + group.charAt(3)
-                    + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
-            );
-        }
-        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
-    }
 }

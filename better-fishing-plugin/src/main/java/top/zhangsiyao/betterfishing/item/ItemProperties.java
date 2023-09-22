@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,27 +15,27 @@ public class ItemProperties implements Serializable {
     /**
      * 材质
      * */
-    String material;
+    String material="";
 
     /**
      * 玩家头颅
      * */
-    String head64;
+    String head64="";
 
     /**
      * 玩家头颅(UUID)
      * */
-    String headUUID;
+    String headUUID="";
 
     /**
      * 自己的头
      * */
-    Boolean ownHead;
+    Boolean ownHead=false;
 
     /**
      * 原始物品
      * */
-    String rawMaterial;
+    String rawMaterial="";
 
     /**
      * 随机材质
@@ -50,6 +51,10 @@ public class ItemProperties implements Serializable {
     FileConfiguration fishConfig;
 
     String prefix;
+
+    public ItemProperties(){
+        materials=new ArrayList<>();
+    }
 
     public ItemProperties(String prefix,String name, FileConfiguration fishConfig) {
         this.fishName = name;

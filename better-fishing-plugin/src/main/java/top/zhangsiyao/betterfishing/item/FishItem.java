@@ -12,7 +12,7 @@ import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.exceptions.InvalidFishException;
 import top.zhangsiyao.betterfishing.reward.Reward;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
-import top.zhangsiyao.betterfishing.utils.FishUtils;
+import top.zhangsiyao.betterfishing.utils.ColorUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
@@ -43,11 +43,11 @@ public class FishItem  implements AbstractItem{
 
     Boolean glowing;
 
-    Double minSize;
+    Double minPoint;
 
     Double weight;
 
-    Double maxSize;
+    Double maxPoint;
 
     Float length;
 
@@ -81,6 +81,18 @@ public class FishItem  implements AbstractItem{
         itemFactory=new ItemFactory(this,file);
     }
 
+    public String getDisplayName() {
+        return ColorUtils.translateHexColorCodes(displayName);
+    }
+
+    public List<String> getLore() {
+        List<String> cur=new ArrayList<>();
+        for (String l:lore){
+            cur.add(ColorUtils.translateHexColorCodes(l));
+        }
+        return cur;
+    }
+
     private ConfigurationSection getSection(){
         return fishConfig.getConfigurationSection("fish."+fishName);
     }
@@ -91,8 +103,8 @@ public class FishItem  implements AbstractItem{
         ItemMeta fishMeta;
 
         if ((fishMeta = fish.getItemMeta()) != null) {
-            if (displayName != null) fishMeta.setDisplayName(FishUtils.translateHexColorCodes(displayName));
-            else fishMeta.setDisplayName(FishUtils.translateHexColorCodes(rarity.getColour() + getFishName()));
+            if (displayName != null) fishMeta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
+            else fishMeta.setDisplayName(ColorUtils.translateHexColorCodes(rarity.getColour() + getFishName()));
 
             fishMeta.setLore(getLore());
 
@@ -101,7 +113,7 @@ public class FishItem  implements AbstractItem{
             fishMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             fish.setItemMeta(fishMeta);
-            fish = BFWorthNBT.setNBT(fish, this);
+            fish = BFWorthNBT.setFishNBT(fish, this);
         }
         return fish;
     }
@@ -128,7 +140,7 @@ public class FishItem  implements AbstractItem{
     }
 
     private void loadDurability(){
-        durability=getSection().getInt("durability");
+        durability=getSection().getInt("durability",0);
     }
 
     private void loadEatEvent(){
@@ -158,11 +170,11 @@ public class FishItem  implements AbstractItem{
     }
 
     private void loadMaxSize(){
-        maxSize=getSection().getDouble("size.maxSize");
+        maxPoint =getSection().getDouble("point.max");
     }
 
     private void loadMinSize(){
-        minSize=getSection().getDouble("size.minSize");
+        minPoint =getSection().getDouble("pint.min");
     }
 
     private void loadRarity(){
@@ -191,8 +203,8 @@ public class FishItem  implements AbstractItem{
                 ", effect='" + effect + '\'' +
                 ", itemProperties=" + itemProperties +
                 ", glowing=" + glowing +
-                ", minSize=" + minSize +
-                ", maxSize=" + maxSize +
+                ", minPoint=" + minPoint +
+                ", maxPoint=" + maxPoint +
                 ", fishName='" + fishName + '\'' +
                 ", fishConfig=" + fishConfig.getName() +
                 '}';

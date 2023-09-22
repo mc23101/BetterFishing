@@ -1,27 +1,43 @@
 fish:
-  # 样例鱼1
+  # 钓鱼掉落物的名称(以下称为"鱼")
   TestFish1:
-    # 钓鱼掉落物的显示标签
+    # "鱼"的显示标签
     displayName: "测试鱼1"
-    # 鱼的稀有度
+    # "鱼"的稀有度
     rarity: Common
     # 鱼的材质信息
+    # 以下材质信息,正常情况下只会生效一个，
+    # 特殊情况会要求配置两个参数，例如：药水
     item:
       material: CHEST
+      # head-64: 头颅的base64编码
+      # head-uuid:头颅主人的UUID
+      # own-head: 为true，掉落钓鱼人的头颅
+      # raw-material: 原始材质
+      # materials: 随机材质
+      # potion: 药水效果，材质为药水时生效
+    # "鱼"的lore
     lore:
       - "第一行Lore"
       - "第二行Lore"
       - "第三行Lore"
+    # 钓上"鱼"时，鱼竿损耗的耐久度
     durability: 1
+    # 可食用性的"鱼"被吃时，执行的操作
+    # 具体操作有(下同)：
     eat-event:
       - "COMMAND:fly"
+    # "鱼"右键时，执行的操作：
     interact-event:
       - "COMMAND:AAA"
+    # 调上该鱼时，触发的药水效果
     effect: "effect"
+    # 是否发光（无属性的附魔效果）
     glowing: true
-    size:
-      maxSize: 20.1
-      minSize: 15.1
+    # "鱼"的积分信息，如果有该值，则rarity的point失效。
+    point:
+      max: 20.1
+      min: 15.1
 
   TestFish2:
     # 钓鱼掉落物的显示标签

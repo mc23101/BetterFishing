@@ -12,6 +12,8 @@ public class NbtConstant {
     public static final String BF_FISH_NAME = "bf-fish-name";
     public static final String BF_FISH_RANDOM_INDEX = "bf-fish-random-index";
     public static final String BF_BAIT_NAME = "bf-bait-name";
+
+    public static final String USE_BAIT_NAME="use-bait-name";
     public static final String PUBLIC_BUKKIT_VALUES = "PublicBukkitValues";
     public static final String ROD_NAME="rod-name";
     public static final String EXTRA_FISH="extra-fish";

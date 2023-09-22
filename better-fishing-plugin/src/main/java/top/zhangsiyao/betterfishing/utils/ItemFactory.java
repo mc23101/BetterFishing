@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.item.AbstractItem;
-import top.zhangsiyao.betterfishing.item.FishItem;
 
 import java.io.File;
 import java.util.List;
@@ -173,7 +172,7 @@ public class ItemFactory {
 
     private ItemStack checkRawMaterial() {
         String materialID = fishItem.getItemProperties().getRawMaterial();
-        if(materialID != null) {
+        if(materialID != null&&!materialID.equals("")) {
             rawMaterial = true;
         }
 
@@ -184,9 +183,6 @@ public class ItemFactory {
         if (materialID == null) {
             return null;
         }
-
-        rawMaterial = true;
-
         try {
             return getItem(materialID);
         } catch (Exception e) {
@@ -249,7 +245,7 @@ public class ItemFactory {
             ItemMeta meta = product.getItemMeta();
 
             if (meta != null) {
-                meta.setDisplayName(FishUtils.translateHexColorCodes(displayName));
+                meta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
             }
 
             product.setItemMeta(meta);
@@ -257,6 +253,7 @@ public class ItemFactory {
     }
 
     private void applyGlow() {
+        System.out.println(fishItem.getGlowing());
         if (fishItem.getGlowing()) {
             this.product.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }

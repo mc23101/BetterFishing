@@ -4,11 +4,16 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import top.zhangsiyao.betterfishing.command.Command;
+import top.zhangsiyao.betterfishing.command.GiveCommand;
 import top.zhangsiyao.betterfishing.config.*;
 
 import top.zhangsiyao.betterfishing.event.FishEatEvent;
 import top.zhangsiyao.betterfishing.event.FishInteractEvent;
+import top.zhangsiyao.betterfishing.event.RodSetBaitEvent;
+import top.zhangsiyao.betterfishing.fishing.FishingBaitProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
 import top.zhangsiyao.betterfishing.item.BRarity;
 import top.zhangsiyao.betterfishing.item.BaitItem;
@@ -39,6 +44,8 @@ public class BetterFishing extends JavaPlugin {
 
 
     public static MainConfig mainConfig;
+
+    public static MessageConfig messageConfig;
 
     /**
      *
@@ -86,7 +93,7 @@ public class BetterFishing extends JavaPlugin {
         instance = this;
         logger = getLogger();
         pluginManager = getServer().getPluginManager();
-
+        setupPermissions();
         initCollections();
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -113,8 +120,10 @@ public class BetterFishing extends JavaPlugin {
     private void listeners() {
 
         getServer().getPluginManager().registerEvents(new FishingNoneBaitProcessor(), this);
+        getServer().getPluginManager().registerEvents(new FishingBaitProcessor(),this);
         getServer().getPluginManager().registerEvents(new FishInteractEvent(),this);
         getServer().getPluginManager().registerEvents(new FishingTitleEvent(),this);
+        getServer().getPluginManager().registerEvents(new RodSetBaitEvent(),this);
         getServer().getPluginManager().registerEvents(new FishEatEvent(),this);
         getServer().getPluginManager().registerEvents(new SkullSaver(), this);
 
@@ -167,14 +176,14 @@ public class BetterFishing extends JavaPlugin {
         fishFile = new FishFile(this);
         baitFile = new BaitFile(this);
         rodFile=new RodFile(this);
+        messageConfig=new MessageConfig(this);
     }
 
     /**
      * 注册服务器指令
      * */
     private void commands() {
-//        getCommand("betterfishing").setExecutor(new CommandCentre(this));
-//        CommandCentre.loadTabCompletes();
+        getCommand("betterfishing").setExecutor(new Command(this));
     }
 
 
@@ -207,6 +216,13 @@ public class BetterFishing extends JavaPlugin {
         competitionWorlds=new ArrayList<>();
 
 
+    }
+
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        permission = rsp.getProvider();
+        return permission != null;
     }
 
     /**

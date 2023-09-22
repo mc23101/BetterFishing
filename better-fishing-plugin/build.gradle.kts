@@ -106,7 +106,7 @@ bukkit {
     commands {
         register("betterfishing") {
             usage = "/<command> [name]"
-            aliases = listOf("emf")
+            aliases = listOf("fishing")
         }
     }
 }

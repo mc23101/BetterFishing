@@ -30,7 +30,9 @@ public class BRarity{
         loadWeight();
         loadColour();
         loadWorthMultiplier();
-        loadMaxSize();
+        loadBroadcast();
+        loadMinPoint();
+        loadMaxPoint();
     }
 
     private void loadWeight(){
@@ -49,12 +51,12 @@ public class BRarity{
         broadcast=rarityConfig.getConfigurationSection("rarities."+name).getBoolean("broadcast");
     }
 
-    private void loadMaxSize(){
-        maxSize=rarityConfig.getConfigurationSection("rarities."+name).getDouble("size.maxSize");
+    private void loadMaxPoint(){
+        maxSize=rarityConfig.getConfigurationSection("rarities."+name).getDouble("point.max");
     }
 
-    private void loadMinSize(){
-        minSize=rarityConfig.getConfigurationSection("rarities."+name).getDouble("size.minSize");
+    private void loadMinPoint(){
+        minSize=rarityConfig.getConfigurationSection("rarities."+name).getDouble("point.min");
     }
 
     @Override

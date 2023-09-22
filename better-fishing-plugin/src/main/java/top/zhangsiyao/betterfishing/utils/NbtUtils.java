@@ -24,129 +24,19 @@ public class NbtUtils {
     }
 
 
-    public static void setDouble(final @NotNull NBTCompound nbtCompound, final String key,final double value){
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        NBTCompound publicBukkitValues;
-        if(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES)){
-            publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }else {
-            publicBukkitValues = nbtCompound.addCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }
-        publicBukkitValues.setDouble(namespacedKey.toString(),value);
-    }
-
-    public static void setInteger(final @NotNull NBTCompound nbtCompound, final String key,final int value){
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        NBTCompound publicBukkitValues;
-        if(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES)){
-            publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }else {
-            publicBukkitValues = nbtCompound.addCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }
-        publicBukkitValues.setInteger(namespacedKey.toString(),value);
-    }
-
-    public static void setString(final @NotNull NBTCompound nbtCompound, final String key,final String value){
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        NBTCompound publicBukkitValues;
-        if(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES)){
-            publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }else {
-            publicBukkitValues = nbtCompound.addCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }
-        publicBukkitValues.setString(namespacedKey.toString(),value);
-    }
-
-
     public static boolean hasKey(final @NotNull NBTCompound nbtCompound, final String key) {
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        //Pre NBT-API PR
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES))) {
-            NBTCompound publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-            if (Boolean.TRUE.equals(publicBukkitValues.hasTag(namespacedKey.toString())))
-                return true;
-        }
-
-        //NBT API PR
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.toString())))
-            return true;
-
-        //NBT COMPAT
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.getNamespace()))) {
-            NBTCompound emfCompound = nbtCompound.getCompound(namespacedKey.getNamespace());
-            return Boolean.TRUE.equals(emfCompound.hasTag(namespacedKey.getKey()));
-        }
-
-        return false;
+        NBTCompound bfCompound = nbtCompound.getOrCreateCompound(NbtConstant.BF_COMPOUND);
+        return bfCompound.hasTag(key);
     }
     
     public static @Nullable String getString(final @NotNull NBTCompound nbtCompound, final String key) {
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES))) {
-            NBTCompound publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-            if (Boolean.TRUE.equals(publicBukkitValues.hasTag(namespacedKey.toString()))) {
-                return publicBukkitValues.getString(namespacedKey.toString());
-            }
-        }
-
-        //NBT API PR
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.toString()))) {
-            return nbtCompound.getString(namespacedKey.toString());
-        }
-
-        //NBT COMPAT
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.getNamespace()))) {
-            NBTCompound emfCompound = nbtCompound.getCompound(namespacedKey.getNamespace());
-            if (Boolean.TRUE.equals(emfCompound.hasTag(namespacedKey.getKey()))) {
-                return emfCompound.getString(namespacedKey.getKey());
-            }
-        }
-
-        return null;
+        NBTCompound bfCompound = nbtCompound.getOrCreateCompound(NbtConstant.BF_COMPOUND);
+        return bfCompound.getString(key);
     }
 
-    public static @Nullable Float getFloat(final @NotNull NBTCompound nbtCompound, final String key) {
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES))) {
-            NBTCompound publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-            if (Boolean.TRUE.equals(publicBukkitValues.hasTag(namespacedKey.toString())))
-                return publicBukkitValues.getFloat(namespacedKey.toString());
-        }
-
-        //NBT API PR
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.toString())))
-            return nbtCompound.getFloat(namespacedKey.toString());
-
-        //NBT COMPAT
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.BF_COMPOUND))) {
-            NBTCompound emfCompound = nbtCompound.getCompound(NbtConstant.BF_COMPOUND);
-            if (Boolean.TRUE.equals(emfCompound.hasTag(key)))
-                return emfCompound.getFloat(key);
-        }
-
-        return null;
-    }
-
-    public static @Nullable Integer getInteger(final @NotNull NBTCompound nbtCompound, final String key) {
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES))) {
-            NBTCompound publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-            if (Boolean.TRUE.equals(publicBukkitValues.hasTag(namespacedKey.toString())))
-                return publicBukkitValues.getInteger(namespacedKey.toString());
-        }
-
-        //NBT API PR
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(namespacedKey.toString())))
-            return nbtCompound.getInteger(namespacedKey.toString());
-
-        //NBT COMPAT
-        if (Boolean.TRUE.equals(nbtCompound.hasTag(NbtConstant.BF_COMPOUND))) {
-            NBTCompound emfCompound = nbtCompound.getCompound(NbtConstant.BF_COMPOUND);
-            if (Boolean.TRUE.equals(emfCompound.hasTag(key)))
-                return emfCompound.getInteger(key);
-        }
-
-        return null;
+    public static void removeNbt(final @NotNull NBTCompound nbtCompound, final String key){
+        NBTCompound bfCompound = nbtCompound.getOrCreateCompound(NbtConstant.BF_COMPOUND);
+        bfCompound.removeKey(key);
     }
 
     /**

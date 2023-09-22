@@ -1,0 +1,12 @@
+
+# 鱼竿lore上显示的鱼饵插槽
+rod-bait-slot: "&c当前使用的鱼饵：{baitName}"
+
+# 获取双倍奖励的消息提醒
+double-drop-message: "恭喜你，获得双倍奖励"
+
+# 背包中的鱼饵用完的消息提示(可选变量：{baitName})
+bait-not-enough: "背包中的鱼饵不足啦！鱼饵加成效果已经失效"
+
+# 鱼竿使用的鱼饵不存在
+bait-not-exist: "鱼竿使用的鱼饵不存在！鱼饵加成效果已经失效"

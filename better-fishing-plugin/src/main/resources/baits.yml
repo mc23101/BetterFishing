@@ -1,9 +1,22 @@
 baits:
+  # 测试鱼饵的名称
   TestBait:
+    # 测试鱼饵的显示标签
     displayName: "测试鱼饵"
+    # 鱼的材质信息
+    # 以下材质信息,正常情况下只会生效一个，
+    # 特殊情况会要求配置两个参数，例如：药水
     item:
       material: NAUTILUS_SHELL
+      # head-64: 头颅的base64编码
+      # head-uuid:头颅主人的UUID
+      # own-head: 为true，掉落钓鱼人的头颅
+      # raw-material: 原始材质
+      # materials: 随机材质
+      # potion: 药水效果，材质为药水时生效
+    # 物品发光(无属性附魔效果)
     glowing: true
+    # 提升概率的鱼(提升数值为fish-weight)
     fish:
         - "Carp"
         - "Bluefish"
