@@ -7,7 +7,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import top.zhangsiyao.betterfishing.config.*;
 
+import top.zhangsiyao.betterfishing.event.FishEatEvent;
+import top.zhangsiyao.betterfishing.event.FishInteractEvent;
+import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
 import top.zhangsiyao.betterfishing.item.BRarity;
+import top.zhangsiyao.betterfishing.item.BaitItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
 
 import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
@@ -20,9 +24,6 @@ import java.util.logging.Logger;
 public class BetterFishing extends JavaPlugin {
     private Random random = new Random();
 
-    public static final int MSG_CONFIG_VERSION = 16;
-    public static final int MAIN_CONFIG_VERSION = 14;
-    public static final int COMP_CONFIG_VERSION = 1;
 
     // "鱼"配置文件(钓鱼的掉落物)
     public static FishFile fishFile;
@@ -36,13 +37,8 @@ public class BetterFishing extends JavaPlugin {
     // 鱼竿配置文件
     public static RodFile rodFile;
 
-    // 额外的"鱼"配置文件
-
-
 
     public static MainConfig mainConfig;
-
-
 
     /**
      *
@@ -60,6 +56,8 @@ public class BetterFishing extends JavaPlugin {
     public static Map<String, BRarity> rarityMap;
 
     public static Map<String, Rod> rodMap;
+
+    public static Map<String, BaitItem> baitMap;
 
     public static List<String> competitionWorlds;
 
@@ -115,6 +113,9 @@ public class BetterFishing extends JavaPlugin {
     private void listeners() {
 
         getServer().getPluginManager().registerEvents(new FishingNoneBaitProcessor(), this);
+        getServer().getPluginManager().registerEvents(new FishInteractEvent(),this);
+        getServer().getPluginManager().registerEvents(new FishingTitleEvent(),this);
+        getServer().getPluginManager().registerEvents(new FishEatEvent(),this);
         getServer().getPluginManager().registerEvents(new SkullSaver(), this);
 
         optionalListeners();
@@ -201,7 +202,7 @@ public class BetterFishing extends JavaPlugin {
         extraRarityFishes=new HashMap<>();
         globalRarityFishes=new HashMap<>();
         allFishes=new HashMap<>();
-
+        baitMap=new HashMap<>();
 
         competitionWorlds=new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package top.zhangsiyao.betterfishing.fishing;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
+import top.zhangsiyao.betterfishing.event.FishTitleEvent;
 import top.zhangsiyao.betterfishing.item.BRarity;
 import top.zhangsiyao.betterfishing.item.FishItem;
 import top.zhangsiyao.betterfishing.item.Rod;
@@ -22,46 +24,44 @@ import java.util.logging.Level;
 
 public class FishingNoneBaitProcessor implements Listener {
 
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void process(PlayerFishEvent event) {
 
         ItemStack rodInHand = event.getPlayer().getInventory().getItemInMainHand();
-        NBTItem nbtItem = new NBTItem(rodInHand);
-
-
-        Rod rod=null;
-        if(NbtUtils.hasKey(nbtItem, NbtConstant.ROD_NAME)){
-            String rodName=NbtUtils.getString(nbtItem, NbtConstant.ROD_NAME);
-            if(BetterFishing.rodMap.containsKey(rodName)){
-                rod= BetterFishing.rodMap.get(rodName);
-            }
-        }
+        Rod rod=FishUtils.getRod(rodInHand);
 
         if(rod==null){
+            return;
+        }
+
+        if(FishUtils.useBait(rodInHand)){
             return;
         }
 
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
         int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
-        if(rod!=null&&rod.getFishingSpeed()!=null){
+        if(rod.getFishingSpeed() != null){
             maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
             minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
 
-
+        ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
+
             // 获取掉到的鱼
-            ItemStack fish = randomFish(event.getPlayer(), event.getHook().getLocation(), event.getPlayer().getInventory().getItemInMainHand(), true, true);
+            fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(),rod);
+
 
             if (fish == null) {
                 return;
             }
 
             //判断是否触发双倍奖励
-            if (rod != null && rod.getDoubleDrop() != null) {
+            if (rod.getDoubleDrop() != null) {
                 Random rand = new Random();
                 float randDouble = rand.nextFloat();
                 if (randDouble <= Float.parseFloat(rod.getDoubleDrop())) {
@@ -80,12 +80,13 @@ public class FishingNoneBaitProcessor implements Listener {
                 }
             }
         }
+        Bukkit.getServer().getPluginManager().callEvent(new FishTitleEvent(fish,event.getState(),event.getPlayer()));
     }
 
     /**
      * 随机获取钓鱼结果
      * */
-    private static ItemStack randomFish(Player player, Location location, ItemStack fishingRod, boolean runRewards, boolean sendMessages){
+    private static ItemStack getRandomFish(Player player, Location location,Rod fishingRod){
 
         if (!FishUtils.checkRegion(location, BetterFishing.mainConfig.getAllowedRegions())) {
             return null;
@@ -95,31 +96,17 @@ public class FishingNoneBaitProcessor implements Listener {
             return null;
         }
 
-
-        FishItem fish=null;
-
-        fish=chooseNonBaitFish(player,location);
-        return fish.give(player,-1);
-    }
-
-    public static FishItem chooseNonBaitFish(Player player, Location location) {
-
-        ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
-        NBTItem nbtItem=new NBTItem(itemInMainHand);
+        FishItem fish;
 
         Map<BRarity,List<FishItem>> curFish=new HashMap<>(BetterFishing.globalRarityFishes);
 
-        if(NbtUtils.hasKey(nbtItem, NbtConstant.ROD_NAME)){
-            Rod rod=BetterFishing.rodMap.get(NbtUtils.getString(nbtItem,NbtConstant.ROD_NAME));
-            System.out.println(BetterFishing.extraRarityFishes.keySet());
-            if(rod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(rod.getExtraFish())){
-                Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(rod.getExtraFish());
-                for(BRarity r:map.keySet()){
-                    if(curFish.containsKey(r)){
-                        curFish.get(r).addAll(map.get(r));
-                    }else {
-                        curFish.put(r,new ArrayList<>(map.get(r)));
-                    }
+        if(fishingRod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(fishingRod.getExtraFish())){
+            Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(fishingRod.getExtraFish());
+            for(BRarity r:map.keySet()){
+                if(curFish.containsKey(r)){
+                    curFish.get(r).addAll(map.get(r));
+                }else {
+                    curFish.put(r,new ArrayList<>(map.get(r)));
                 }
             }
         }
@@ -127,45 +114,24 @@ public class FishingNoneBaitProcessor implements Listener {
 
         BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet());
         if (fishRarity == null) {
-            BetterFishing.logger.log(Level.SEVERE, "Could not determine a rarity for fish for " + player.getName());
+            BetterFishing.logger.log(Level.SEVERE,  player.getName()+"无法获取稀有度 " );
             return null;
         }
 
-        FishItem fish = randomFish(fishRarity, location, player, 1, null);
+        fish = randomFish(fishRarity, location, player, 1, null,curFish);
         if (fish == null) {
-            BetterFishing.logger.log(Level.SEVERE, "Could not determine a fish for " + player.getName());
+            BetterFishing.logger.log(Level.SEVERE, player.getName()+"无法获取钓鱼结果 ");
             return null;
         }
         fish.setFisherman(player.getUniqueId());
-        return fish;
+        return fish.give(player,-1);
     }
 
-
-    public static FishItem randomFish(BRarity r, Location l, Player p, double boostRate, List<FishItem> boostedFish) {
+    public static FishItem randomFish(BRarity r, Location l, Player p, double boostRate, List<FishItem> boostedFish, Map<BRarity,List<FishItem>> curFish) {
         if (r == null) return null;
         // will store all the fish that match the player's biome or don't discriminate biomes
 
         List<FishItem> available = new ArrayList<>();
-
-        ItemStack itemInMainHand = p.getInventory().getItemInMainHand();
-        NBTItem nbtItem=new NBTItem(itemInMainHand);
-
-        Map<BRarity,List<FishItem>> curFish=new HashMap<>(BetterFishing.globalRarityFishes);
-
-        if(NbtUtils.hasKey(nbtItem, NbtConstant.ROD_NAME)){
-            Rod rod=BetterFishing.rodMap.get(NbtUtils.getString(nbtItem,NbtConstant.ROD_NAME));
-            if(rod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(rod.getExtraFish())){
-                Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(rod.getExtraFish());
-                for(BRarity rarity:map.keySet()){
-                    if(curFish.containsKey(rarity)){
-                        curFish.get(rarity).addAll(map.get(rarity));
-                    }else {
-                        curFish.put(rarity,new ArrayList<>(map.get(rarity)));
-                    }
-                }
-            }
-        }
-
 
         // 防止/emf admin重载导致插件无法获得稀有性
         if (curFish.get(r) == null)

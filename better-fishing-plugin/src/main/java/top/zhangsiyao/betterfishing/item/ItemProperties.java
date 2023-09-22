@@ -49,9 +49,12 @@ public class ItemProperties implements Serializable {
     String fishName;
     FileConfiguration fishConfig;
 
-    public ItemProperties(String fishName, FileConfiguration fishConfig) {
-        this.fishName = fishName;
+    String prefix;
+
+    public ItemProperties(String prefix,String name, FileConfiguration fishConfig) {
+        this.fishName = name;
         this.fishConfig = fishConfig;
+        this.prefix=prefix;
         loadMaterial();
         loadHead64();
         loadHeadUUID();
@@ -62,7 +65,7 @@ public class ItemProperties implements Serializable {
     }
 
     private ConfigurationSection getSection(){
-         return Objects.requireNonNull(fishConfig.getConfigurationSection("fish")).getConfigurationSection(fishName+".item");
+         return Objects.requireNonNull(fishConfig.getConfigurationSection(prefix)).getConfigurationSection(fishName+".item");
     }
 
     private void loadMaterial(){

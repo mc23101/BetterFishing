@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.item.AbstractItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
 
 import java.io.File;
@@ -21,7 +22,7 @@ import java.util.logging.Level;
 
 public class ItemFactory {
 
-    FishItem fishItem;
+    AbstractItem fishItem;
 
     private File file;
     private ItemStack product;
@@ -32,7 +33,7 @@ public class ItemFactory {
     private boolean rawMaterial;
     private String displayName;
 
-    public ItemFactory(FishItem fishItem, File file) {
+    public ItemFactory(AbstractItem fishItem, File file) {
         this.fishItem = fishItem;
         this.file=file;
         this.product=getType(null);

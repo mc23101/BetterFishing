@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Data
 @Getter
-public class FishItem  {
+public class FishItem  implements AbstractItem{
 
     File file;
 
@@ -150,7 +150,7 @@ public class FishItem  {
     }
 
     private void loadItemProperties(){
-        itemProperties=new ItemProperties(fishName,fishConfig);
+        itemProperties=new ItemProperties("fish",fishName,fishConfig);
     }
 
     private void loadGlowing(){
@@ -198,5 +198,15 @@ public class FishItem  {
                 '}';
     }
 
+    @Override
+    public int hashCode(){
+        return fishName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        FishItem fishItem=(FishItem) obj;
+        return this.fishName.equals(fishItem.getFishName());
+    }
 
 }

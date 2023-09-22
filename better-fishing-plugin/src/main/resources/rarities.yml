@@ -1,8 +1,3 @@
-# Welcome to the rarities.yml file, edit your rarities here with guidance from comments. As of writing this (28th July, 2022) there is no rarities.yml wiki page as it is fairly basic, if you need any
-# assistance in understanding a setting or feature, I am usually available at the official BetterFishing discord server at: https://discord.gg/Hb9cj3tNbb (this is a non-expiring link).
-
-# All files support hex codes, this is used in the format &#66aabb. A gradient maker can be found here: https://minecraft.menu/minecraft-rgb-generator - use the provided format ("Nickname (&rrggbb)") for compatibility with BetterFishing.
-# NOTE: If you change your rarity names here, make sure to change them in the fish.yml file too to match.
 
 rarities:
   # ▼ All rarity names should start on the same column as this down arrow.

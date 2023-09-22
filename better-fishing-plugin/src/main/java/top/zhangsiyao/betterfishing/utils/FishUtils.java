@@ -9,14 +9,15 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTUUIDList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
+import top.zhangsiyao.betterfishing.item.BaitItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
+import top.zhangsiyao.betterfishing.item.Rod;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +28,38 @@ public class FishUtils {
 
     private static final Pattern HEX_PATTERN = Pattern.compile("&#" + "([A-Fa-f0-9]{6})");
     private static final char COLOR_CHAR = '\u00A7';
+
+
+    public static Rod getRod(ItemStack stack){
+        NBTItem nbtItem=new NBTItem(stack);
+        if(!NbtUtils.hasKey(nbtItem,NbtConstant.ROD_NAME)){
+            return null;
+        }
+        String rodName=NbtUtils.getString(nbtItem, NbtConstant.ROD_NAME);
+        if(!BetterFishing.rodMap.containsKey(rodName)){
+            return null;
+        }
+        return BetterFishing.rodMap.get(rodName);
+    }
+
+
+    public static boolean useBait(ItemStack itemStack){
+        NBTItem nbtItem=new NBTItem(itemStack);
+        if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public static BaitItem getBait(ItemStack itemStack){
+        NBTItem nbtItem=new NBTItem(itemStack);
+        if(!useBait(itemStack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME))){
+            return null;
+        }else {
+            return BetterFishing.baitMap.get(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME));
+        }
+    }
 
 
     /**
