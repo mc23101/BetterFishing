@@ -217,22 +217,14 @@ public class ItemFactory {
     }
 
     public void applyDamage() {
-
-        ItemMeta meta = product.getItemMeta();
-        if (meta instanceof Damageable) {
-            Damageable nonDamaged = (Damageable) meta;
-
-            int predefinedDamage = fishItem.getDurability();
-            if (predefinedDamage >= 0 && predefinedDamage <= 100) {
-                nonDamaged.setDamage((int) (predefinedDamage / 100.0 * product.getType().getMaxDurability()));
-            } else {
-                if (BetterFishing.mainConfig.doingRandomDurability()) {
-                    int max = product.getType().getMaxDurability();
-                    nonDamaged.setDamage(BetterFishing.getInstance().getRandom().nextInt() * (max + 1));
-                }
+        int predefinedDamage = fishItem.getDurability();
+        if (predefinedDamage >= 0 && predefinedDamage <= 100) {
+            product.setDurability((short) (predefinedDamage / 100.0 * product.getType().getMaxDurability()));
+        } else {
+            if (BetterFishing.mainConfig.doingRandomDurability()) {
+                int max = product.getType().getMaxDurability();
+                product.setDurability((short) (BetterFishing.getInstance().getRandom().nextInt() * (max + 1)));
             }
-
-            product.setItemMeta(nonDamaged);
         }
     }
 

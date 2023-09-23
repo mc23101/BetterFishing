@@ -45,7 +45,7 @@ public class FishUtils {
 
     public static boolean useBait(ItemStack itemStack){
         NBTItem nbtItem=new NBTItem(itemStack);
-        if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.USE_BAIT_NAME)){
+        if(itemStack.getType().equals(Material.AIR) || !NbtUtils.hasKey(nbtItem, NbtConstant.USE_BAIT_NAME)){
             return false;
         }else {
             return true;

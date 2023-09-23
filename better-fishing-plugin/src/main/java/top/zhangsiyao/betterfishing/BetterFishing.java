@@ -3,6 +3,7 @@ package top.zhangsiyao.betterfishing;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -89,7 +90,6 @@ public class BetterFishing extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         instance = this;
         logger = getLogger();
         pluginManager = getServer().getPluginManager();

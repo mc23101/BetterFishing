@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.1"
+version = "1.0.2"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
@@ -32,7 +32,6 @@ repositories {
 }
 
 dependencies {
-
     compileOnly(libs.spigot.api)
     compileOnly(libs.vault.api)
     compileOnly(libs.placeholder.api)
@@ -103,7 +102,7 @@ bukkit {
         "HeadDatabase"
     )
     loadBefore = listOf("AntiAC")
-    apiVersion = "1.16"
+    apiVersion = "1.13"
 
     commands {
         register("betterfishing") {

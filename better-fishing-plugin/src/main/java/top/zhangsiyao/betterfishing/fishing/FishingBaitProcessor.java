@@ -63,6 +63,7 @@ public class FishingBaitProcessor implements Listener {
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
 
+
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
             // 获取掉到的鱼

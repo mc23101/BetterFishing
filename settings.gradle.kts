@@ -27,6 +27,7 @@ dependencyResolutionManagement {
         create("libs") {
             library("taboolib","com.github.TabooLib:TabooLib:6.0.12-20")
             library("spigot-api", "org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+            library("spigot1122","org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
             library("vault-api", "com.github.MilkBowl:VaultAPI:1.7.1")
             library("placeholder-api", "me.clip:placeholderapi:2.11.3")
             library("authlib", "com.mojang:authlib:1.5.21")

@@ -7,7 +7,7 @@ baits:
     # 以下材质信息,正常情况下只会生效一个，
     # 特殊情况会要求配置两个参数，例如：药水
     item:
-      material: NAUTILUS_SHELL
+      material: DIAMOND
       # head-64: 头颅的base64编码
       # head-uuid:头颅主人的UUID
       # own-head: 为true，掉落钓鱼人的头颅
@@ -18,12 +18,7 @@ baits:
     glowing: true
     # 提升概率的鱼(提升数值为fish-weight)
     fish:
-        - "Carp"
-        - "Bluefish"
-        - "Haddock"
-        - "Sunfish"
-        - "Goldfish"
-        - "Nemo"
+        - "TestFish1"
     # 提升概率的稀有度
     rarity:
       - "Common"

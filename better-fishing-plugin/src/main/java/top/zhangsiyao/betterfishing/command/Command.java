@@ -48,7 +48,7 @@ public class Command implements CommandExecutor , TabCompleter {
         }
         Player player=(Player) sender;
         if(args.length==1){
-            return new ArrayList<>(Arrays.asList("give","shop"));
+            return new ArrayList<>(Arrays.asList("give","gui","shop"));
         }else if(args[0].equals("give")&&BetterFishing.permission.has(player,"better-fishing.give")){
             if(args.length==2){
                 return new ArrayList<>(Arrays.asList("rod","bait","fish"));
