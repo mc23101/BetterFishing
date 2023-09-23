@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.constant.MessageKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +27,15 @@ public class Command implements CommandExecutor , TabCompleter {
             return false;
         }
         Player player=(Player) sender;
-        if(args[0].equals("give")&&BetterFishing.permission.has(player,"better-fishing.give")){
+        if(args.length>0&&args[0].equals("give")&&BetterFishing.permission.has(player,"better-fishing.give")){
             new GiveCommand(plugin).onCommand(sender,command,label,args);
+        }else {
+            List<String> commandInfo = BetterFishing.messageConfig.getList(MessageKey.command_info);
+            StringBuilder message= new StringBuilder();
+            for(String m:commandInfo){
+                message.append(m).append("\n");
+            }
+            player.sendMessage(message.toString());
         }
         return true;
     }

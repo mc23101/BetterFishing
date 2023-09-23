@@ -12,7 +12,7 @@ import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.exceptions.InvalidFishException;
 import top.zhangsiyao.betterfishing.reward.Reward;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
-import top.zhangsiyao.betterfishing.utils.ColorUtils;
+import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
@@ -82,13 +82,13 @@ public class FishItem  implements AbstractItem{
     }
 
     public String getDisplayName() {
-        return ColorUtils.translateHexColorCodes(displayName);
+        return TextUtils.translateHexColorCodes(displayName);
     }
 
     public List<String> getLore() {
         List<String> cur=new ArrayList<>();
         for (String l:lore){
-            cur.add(ColorUtils.translateHexColorCodes(l));
+            cur.add(TextUtils.translateHexColorCodes(l));
         }
         return cur;
     }
@@ -103,8 +103,8 @@ public class FishItem  implements AbstractItem{
         ItemMeta fishMeta;
 
         if ((fishMeta = fish.getItemMeta()) != null) {
-            if (displayName != null) fishMeta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
-            else fishMeta.setDisplayName(ColorUtils.translateHexColorCodes(rarity.getColour() + getFishName()));
+            if (displayName != null) fishMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
+            else fishMeta.setDisplayName(TextUtils.translateHexColorCodes(rarity.getColour() + getFishName()));
 
             fishMeta.setLore(getLore());
 

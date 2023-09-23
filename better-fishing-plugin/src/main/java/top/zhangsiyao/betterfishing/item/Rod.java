@@ -8,10 +8,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
-import top.zhangsiyao.betterfishing.config.MessageConfig;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
-import top.zhangsiyao.betterfishing.utils.ColorUtils;
+import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
@@ -70,13 +69,13 @@ public class Rod implements AbstractItem {
     }
 
     public String getDisplayName() {
-        return ColorUtils.translateHexColorCodes(displayName);
+        return TextUtils.translateHexColorCodes(displayName);
     }
 
     public List<String> getLore() {
         List<String> cur=new ArrayList<>();
         for (String l:lore){
-            cur.add(ColorUtils.translateHexColorCodes(l));
+            cur.add(TextUtils.translateHexColorCodes(l));
         }
         return cur;
     }
@@ -88,8 +87,8 @@ public class Rod implements AbstractItem {
         ItemMeta rodMeta;
 
         if ((rodMeta = rod.getItemMeta()) != null) {
-            if (displayName != null) rodMeta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
-            else rodMeta.setDisplayName(ColorUtils.translateHexColorCodes(getRodName()));
+            if (displayName != null) rodMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
+            else rodMeta.setDisplayName(TextUtils.translateHexColorCodes(getRodName()));
 
             List<String> newLore=getLore();
 
@@ -187,7 +186,6 @@ public class Rod implements AbstractItem {
 
     private void loadGlowing(){
         glowing=getSection().getBoolean("glowing",false);
-        System.out.println(glowing);
     }
 
     @Override

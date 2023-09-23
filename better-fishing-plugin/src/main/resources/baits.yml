@@ -24,7 +24,10 @@ baits:
         - "Sunfish"
         - "Goldfish"
         - "Nemo"
+    # 提升概率的稀有度
     rarity:
       - "Common"
+    # 鱼提升的权重(概率)
     fish-weight: 100
+    # 稀有度提升的权重(概率)
     rarity-weight: 100

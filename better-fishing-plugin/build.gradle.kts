@@ -6,11 +6,12 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.0"
+version = "1.0.1"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
 repositories {
+    maven("https://jitpack.io")
     maven("https://lss233.littleservice.cn/repositories/minecraft")
     maven("https://maven.aliyun.com/repository/jcenter")
     maven("https://maven.aliyun.com/repository/google")
@@ -19,7 +20,6 @@ repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
     maven("https://github.com/deanveloper/SkullCreator/raw/mvn-repo/")
-    maven("https://jitpack.io")
     maven("https://maven.enginehub.org/repo/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://raw.githubusercontent.com/FabioZumbi12/RedProtect/mvn-repo/")
@@ -32,11 +32,11 @@ repositories {
 }
 
 dependencies {
+
     compileOnly(libs.spigot.api)
     compileOnly(libs.vault.api)
     compileOnly(libs.placeholder.api)
     compileOnly(libs.authlib)
-
     compileOnly(libs.worldguard.core) {
         exclude("com.sk89q.worldedit", "worldedit-core")
     }
@@ -64,6 +64,8 @@ dependencies {
 
     compileOnly(libs.lombok)
 
+
+
     implementation(libs.nbt.api)
     implementation(libs.bstats)
 
@@ -85,7 +87,7 @@ bukkit {
     main = "top.zhangsiyao.betterfishing.BetterFishing"
     version = project.version.toString()
     description = project.description.toString()
-    website = "https://github.com/mc23101/BetterFishing/tree/main"
+    website = "https://github.com/mc23101/BetterFishing"
 
     depend = listOf("Vault")
     softDepend = listOf(

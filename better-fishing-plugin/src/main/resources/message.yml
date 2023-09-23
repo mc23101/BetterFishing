@@ -10,3 +10,40 @@ bait-not-enough: "背包中的鱼饵不足啦！鱼饵加成效果已经失效"
 
 # 鱼竿使用的鱼饵不存在
 bait-not-exist: "鱼竿使用的鱼饵不存在！鱼饵加成效果已经失效"
+
+# 钓鱼时，actionbar的提示信息
+fishing-actionbar-message: "&a&l钓鱼中...当前使用的鱼竿：{rodName}&a&l...当前使用的鱼饵：{baitName}"
+
+# 钓鱼时，鱼咬竿时的title提示消息
+fishing-title-fish-catch:
+  # 主标题
+  title: "&c鱼儿上钩啦"
+  # 副标题
+  subtitle: "&a快收起鱼竿吧"
+
+# 钓鱼时，鱼儿跑掉了的title提示消息
+fishing-title-failed-attempt:
+  # 主标题
+  title: "&a很遗憾，你的鱼儿跑掉啦"
+  # 副标题
+  subtitle: "&a再来尝试一次吧"
+
+# 钓鱼时，成功钓起鱼的title提示消息
+fishing-title-success:
+  # 主标题
+  title: "{fishName}!"
+  # 副标题
+  subtitle: "&a恭喜你，鱼儿成功上钩啦"
+
+# 钓鱼时,收杆太快的title提示消息
+fishing-title-reel-in-fast:
+  # 主标题
+  title: "&a你收杆太快啦"
+  # 副标题
+  subtitle: "&a耐心等待鱼上钩吧"
+
+# 插件指令的介绍信息
+command-info:
+  - "================================BetterFishing================================"
+  - "&b/fishing give &a给予插件物品指令，可以给予鱼竿、鱼饵、掉落物"
+  - "============================================================================="

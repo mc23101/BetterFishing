@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
-import top.zhangsiyao.betterfishing.utils.ColorUtils;
+import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
@@ -20,6 +20,8 @@ import java.util.List;
 @Data
 @Getter
 public class BaitItem implements AbstractItem{
+
+    public static BaitItem empty=new BaitItem("无");
 
     ItemFactory itemFactory;
 
@@ -49,6 +51,10 @@ public class BaitItem implements AbstractItem{
 
     FileConfiguration baitConfig;
 
+    private BaitItem(String baitName){
+        this.baitName=baitName;
+    }
+
     public BaitItem(String name, FileConfiguration baitConfig,File file) {
         this.baitName = name;
         this.baitConfig = baitConfig;
@@ -66,13 +72,13 @@ public class BaitItem implements AbstractItem{
     }
 
     public String getDisplayName() {
-        return ColorUtils.translateHexColorCodes(displayName==null?baitName:displayName);
+        return TextUtils.translateHexColorCodes(displayName==null?baitName:displayName);
     }
 
     public List<String> getLore() {
         List<String> cur=new ArrayList<>();
         for (String l:lore){
-            cur.add(ColorUtils.translateHexColorCodes(l));
+            cur.add(TextUtils.translateHexColorCodes(l));
         }
         return cur;
     }
@@ -83,8 +89,8 @@ public class BaitItem implements AbstractItem{
         ItemMeta baitMeta;
 
         if ((baitMeta = bait.getItemMeta()) != null) {
-            if (displayName != null) baitMeta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
-            else baitMeta.setDisplayName(ColorUtils.translateHexColorCodes(getBaitName()));
+            if (displayName != null) baitMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
+            else baitMeta.setDisplayName(TextUtils.translateHexColorCodes(getBaitName()));
 
             baitMeta.setLore(getLore());
 

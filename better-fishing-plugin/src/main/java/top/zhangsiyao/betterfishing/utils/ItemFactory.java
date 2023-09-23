@@ -245,7 +245,7 @@ public class ItemFactory {
             ItemMeta meta = product.getItemMeta();
 
             if (meta != null) {
-                meta.setDisplayName(ColorUtils.translateHexColorCodes(displayName));
+                meta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
             }
 
             product.setItemMeta(meta);
@@ -253,7 +253,6 @@ public class ItemFactory {
     }
 
     private void applyGlow() {
-        System.out.println(fishItem.getGlowing());
         if (fishItem.getGlowing()) {
             this.product.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }
