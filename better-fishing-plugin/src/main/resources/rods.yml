@@ -18,6 +18,6 @@ rods:
     # 指定稀有度的增加权重，稀有度必须在rarities.yml中有定义，否则会报错
     # 该项可配置多个，格式为  稀有度：权重
     rarities:
-      common: 30
+      Common: 30
     # 该鱼竿的额外掉落物，在extrafish目录中配置，名字为文件内部的 name属性
     extra-fish: fish1

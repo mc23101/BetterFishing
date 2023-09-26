@@ -1,5 +1,8 @@
 package top.zhangsiyao.betterfishing.item;
 
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.List;
 
 public interface AbstractItem {
@@ -13,7 +16,7 @@ public interface AbstractItem {
 
     Boolean getGlowing();
 
-
+    ItemStack give(Player player, int randomIndex);
 
 
 }

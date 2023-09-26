@@ -12,15 +12,9 @@ import top.zhangsiyao.betterfishing.constant.NbtConstant;
 
 public class NbtUtils {
 
-    public static void setFloat(final @NotNull NBTCompound nbtCompound, final String key,final float value){
-        NamespacedKey namespacedKey = getNamespacedKey(key);
-        NBTCompound publicBukkitValues;
-        if(nbtCompound.hasTag(NbtConstant.PUBLIC_BUKKIT_VALUES)){
-            publicBukkitValues = nbtCompound.getCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }else {
-            publicBukkitValues = nbtCompound.addCompound(NbtConstant.PUBLIC_BUKKIT_VALUES);
-        }
-        publicBukkitValues.setFloat(namespacedKey.toString(),value);
+    public static void setString(final @NotNull NBTCompound nbtCompound, final String key,final String value){
+        NBTCompound bfCompound = nbtCompound.getOrCreateCompound(NbtConstant.BF_COMPOUND);
+        bfCompound.setString(key,value);
     }
 
 

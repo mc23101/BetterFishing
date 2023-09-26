@@ -53,6 +53,7 @@ public class FishingBaitProcessor implements Listener {
         }
 
 
+
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
         int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();

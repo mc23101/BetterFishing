@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.constant.BaitKey;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
@@ -105,32 +106,32 @@ public class BaitItem implements AbstractItem{
     }
 
     private ConfigurationSection getSection(){
-        return baitConfig.getConfigurationSection("baits."+baitName);
+        return baitConfig.getConfigurationSection(BaitKey.bait_root).getConfigurationSection(baitName);
     }
 
     private void loadFishWeight(){
-        fishWeight=getSection().getDouble("fish-weight",10.0);
+        fishWeight=getSection().getDouble(BaitKey.fish_weight,10.0);
     }
 
     private void loadRarityWeight(){
-        rarityWeight=getSection().getDouble("rarity-weight",10.0);
+        rarityWeight=getSection().getDouble(BaitKey.rarity_weight,10.0);
     }
 
     private void loadDisplayName(){
-        displayName=getSection().getString("displayName",baitName);
+        displayName=getSection().getString(BaitKey.display_name,baitName);
     }
 
     private void loadLore(){
-        lore=getSection().getStringList("lore");
+        lore=getSection().getStringList(BaitKey.lore);
     }
 
     private void loadDurability(){
-        durability=getSection().getInt("durability",0);
+        durability=getSection().getInt(BaitKey.durability,0);
     }
 
     private void loadFish(){
         List<FishItem> fish=new ArrayList<>();
-        for(String fishName:getSection().getStringList("fish")){
+        for(String fishName:getSection().getStringList(BaitKey.fish)){
             if(BetterFishing.allFishes.containsKey(fishName)){
                 fish.add(BetterFishing.allFishes.get(fishName));
             }else {
@@ -141,17 +142,17 @@ public class BaitItem implements AbstractItem{
     }
 
     private void loadItemProperties(){
-        itemProperties=new ItemProperties("baits",baitName,baitConfig);
+        itemProperties=new ItemProperties(BaitKey.bait_root,baitName,baitConfig);
     }
 
     private void loadGlowing(){
-        glowing=getSection().getBoolean("glowing",false);
+        glowing=getSection().getBoolean(BaitKey.glowing,false);
     }
 
 
     private void loadRarities(){
         List<BRarity> rarities=new ArrayList<>();
-        for(String rarityName:getSection().getStringList("rarity")){
+        for(String rarityName:getSection().getStringList(BaitKey.rarity)){
             if(BetterFishing.rarityMap.containsKey(rarityName)){
                 rarities.add(BetterFishing.rarityMap.get(rarityName));
             }else{

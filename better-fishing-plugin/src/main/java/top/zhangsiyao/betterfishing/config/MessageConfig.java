@@ -67,7 +67,7 @@ public class MessageConfig {
     }
 
     public String get(String messageKey){
-        return TextUtils.translateHexColorCodes(messageConfig.getString(messageKey));
+        return TextUtils.translateHexColorCodes(messageConfig.getString(messageKey,""));
     }
 
     public List<String> getList(String messageKey){

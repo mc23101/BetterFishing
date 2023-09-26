@@ -42,6 +42,15 @@ fishing-title-reel-in-fast:
   # 副标题
   subtitle: "&a耐心等待鱼上钩吧"
 
+# 鱼饵图鉴GUI的title
+bait-gui-title: "&a&l鱼饵图鉴"
+
+# 掉落物图鉴GUI的title
+fish-gui-title: "&a&l掉落物图鉴"
+
+# 鱼竿图鉴的GUI的title
+rod-gui-title: "&a&l鱼竿图鉴"
+
 # 插件指令的介绍信息
 command-info:
   - "================================BetterFishing================================"

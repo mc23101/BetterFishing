@@ -3,6 +3,7 @@ package top.zhangsiyao.betterfishing.config;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.constant.BaitKey;
 import top.zhangsiyao.betterfishing.item.BaitItem;
 
 import java.io.File;
@@ -36,7 +37,11 @@ public class BaitFile {
             e.printStackTrace();
         }
 
-        for(String baitName:baitConfig.getConfigurationSection("baits").getKeys(false)){
+        if(!baitConfig.contains(BaitKey.bait_root)){
+            return;
+        }
+
+        for(String baitName:baitConfig.getConfigurationSection(BaitKey.bait_root).getKeys(false)){
             if(BetterFishing.baitMap.containsKey(baitName)){
                 throw new RuntimeException(baitFile.getPath()+"中的名称："+baitName+"已被占用");
             }

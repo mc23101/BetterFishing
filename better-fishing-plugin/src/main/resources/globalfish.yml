@@ -27,9 +27,16 @@ fish:
     # 具体操作有(下同)：
     eat-event:
       - "COMMAND:fly"
+    # "鱼"右键时，执行的操作类型：随机、顺序执行.
+    # 不配置此项，默认为false  顺序执行
+    # false: 顺序执行.
+    # true: 随机执行.
+    interact-event-random: true
     # "鱼"右键时，执行的操作：
     interact-event:
-      - "COMMAND:AAA"
+      - "COMMAND:msg {player} AAA"
+      - "COMMAND:msg {player} BBB"
+      - "COMMAND:msg {player} CCC"
     # 调上该鱼时，触发的药水效果
     effect: "effect"
     # 是否发光（无属性的附魔效果）

@@ -39,6 +39,7 @@ public class FishingNoneBaitProcessor implements Listener {
             return;
         }
 
+
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
         int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
@@ -136,6 +137,8 @@ public class FishingNoneBaitProcessor implements Listener {
         // 防止/emf admin重载导致插件无法获得稀有性
         if (curFish.get(r) == null)
             r = randomWeightedRarity(p, 1, null, curFish.keySet());
+
+
 
         for (FishItem f : curFish.get(r)) {
 
