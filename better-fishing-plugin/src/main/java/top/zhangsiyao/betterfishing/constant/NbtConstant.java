@@ -20,4 +20,6 @@ public class NbtConstant {
     public static final String FISHING_SPEED = "fishing-speed";
     public static final String DOUBLE_DROP="double-drop";
 
+    public static final String PAGE="page";
+
 }

@@ -3,6 +3,7 @@ package top.zhangsiyao.betterfishing.item;
 import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import top.zhangsiyao.betterfishing.constant.ItemPropertiesKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,35 +71,35 @@ public class ItemProperties implements Serializable {
     }
 
     private ConfigurationSection getSection(){
-         return Objects.requireNonNull(fishConfig.getConfigurationSection(prefix)).getConfigurationSection(fishName+".item");
+         return Objects.requireNonNull(fishConfig.getConfigurationSection(prefix)).getConfigurationSection(fishName).getConfigurationSection(ItemPropertiesKey.root);
     }
 
     private void loadMaterial(){
-        material=getSection().getString("material");
+        material=getSection().getString(ItemPropertiesKey.material);
     }
 
     private void loadHead64(){
-        head64=getSection().getString("head-64");
+        head64=getSection().getString(ItemPropertiesKey.head_64);
     }
 
     private void loadHeadUUID(){
-        headUUID=getSection().getString("head-uuid");
+        headUUID=getSection().getString(ItemPropertiesKey.head_uuid);
     }
 
     private void loadOwnHead(){
-        ownHead=getSection().getBoolean("own-head");
+        ownHead=getSection().getBoolean(ItemPropertiesKey.own_head);
     }
 
     private void loadRowMaterial(){
-        rawMaterial=getSection().getString("raw-material");
+        rawMaterial=getSection().getString(ItemPropertiesKey.raw_material);
     }
 
     private void loadMaterials(){
-        materials=getSection().getStringList("materials");
+        materials=getSection().getStringList(ItemPropertiesKey.materials);
     }
 
     private void loadPotion(){
-        potion=getSection().getString("potion");
+        potion=getSection().getString(ItemPropertiesKey.potion);
     }
 
     @Override

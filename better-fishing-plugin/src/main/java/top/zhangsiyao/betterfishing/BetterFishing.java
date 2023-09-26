@@ -3,24 +3,24 @@ package top.zhangsiyao.betterfishing;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import top.zhangsiyao.betterfishing.command.Command;
-import top.zhangsiyao.betterfishing.command.GiveCommand;
 import top.zhangsiyao.betterfishing.config.*;
-
+import top.zhangsiyao.betterfishing.event.FishBlockPlaceEvent;
 import top.zhangsiyao.betterfishing.event.FishEatEvent;
 import top.zhangsiyao.betterfishing.event.FishInteractEvent;
 import top.zhangsiyao.betterfishing.event.RodSetBaitEvent;
 import top.zhangsiyao.betterfishing.fishing.FishingBaitProcessor;
+import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
+import top.zhangsiyao.betterfishing.gui.BaitGui;
+import top.zhangsiyao.betterfishing.gui.FishGui;
+import top.zhangsiyao.betterfishing.gui.RodGui;
 import top.zhangsiyao.betterfishing.item.BRarity;
 import top.zhangsiyao.betterfishing.item.BaitItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
-
-import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
 import top.zhangsiyao.betterfishing.item.Rod;
 
 import java.util.*;
@@ -95,10 +95,7 @@ public class BetterFishing extends JavaPlugin {
         pluginManager = getServer().getPluginManager();
         setupPermissions();
         initCollections();
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
         loadAllConfig();
-
 
         listeners();
         commands();
@@ -118,11 +115,14 @@ public class BetterFishing extends JavaPlugin {
      * 注册基本监听器
      * */
     private void listeners() {
-
+        getServer().getPluginManager().registerEvents(new RodGui(),this);
         getServer().getPluginManager().registerEvents(new FishingNoneBaitProcessor(), this);
         getServer().getPluginManager().registerEvents(new FishingBaitProcessor(),this);
         getServer().getPluginManager().registerEvents(new FishInteractEvent(),this);
+        getServer().getPluginManager().registerEvents(new FishGui(),this);
         getServer().getPluginManager().registerEvents(new FishingTitleEvent(),this);
+        getServer().getPluginManager().registerEvents(new FishBlockPlaceEvent(),this);
+        getServer().getPluginManager().registerEvents(new BaitGui(),this);
         getServer().getPluginManager().registerEvents(new RodSetBaitEvent(),this);
         getServer().getPluginManager().registerEvents(new FishEatEvent(),this);
         getServer().getPluginManager().registerEvents(new SkullSaver(), this);
@@ -170,6 +170,9 @@ public class BetterFishing extends JavaPlugin {
      * 读取插件配置文件
      * */
     private void loadAllConfig(){
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        reloadConfig();
         //加载配置文件
         mainConfig = new MainConfig(this);
         raritiesFile = new RaritiesFile(this);
@@ -177,6 +180,9 @@ public class BetterFishing extends JavaPlugin {
         baitFile = new BaitFile(this);
         rodFile=new RodFile(this);
         messageConfig=new MessageConfig(this);
+        logger.log(Level.INFO,"加载鱼"+allFishes.size()+"个");
+        logger.log(Level.INFO,"加载稀有度"+rarityMap.size()+"个");
+        logger.log(Level.INFO,"加载鱼饵"+baitMap.size()+"个");
     }
 
     /**
@@ -230,9 +236,8 @@ public class BetterFishing extends JavaPlugin {
      * */
     public void reload() {
         terminateSellGUIS();
+        //初始化插件容器
         initCollections();
-        reloadConfig();
-        saveDefaultConfig();
         loadAllConfig();
     }
 

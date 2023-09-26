@@ -6,6 +6,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.item.FishItem;
 import top.zhangsiyao.betterfishing.reward.Reward;
 import top.zhangsiyao.betterfishing.utils.FishUtils;
@@ -26,8 +27,13 @@ public class FishInteractEvent implements Listener {
                 event.setCancelled(true);
                 ItemStack itemInHand = event.getItem();
                 event.getPlayer().getInventory().getItemInMainHand().setAmount(itemInHand.getAmount() - 1);
-                for (Reward r : fish.getInteractRewards()) {
-                    r.run(event.getPlayer(), null);
+                if(fish.getInteractType()){
+                    int index = BetterFishing.getInstance().getRandom().nextInt(fish.getInteractRewards().size());
+                    fish.getInteractRewards().get(index).run(event.getPlayer(),null);
+                }else {
+                    for (Reward r : fish.getInteractRewards()) {
+                        r.run(event.getPlayer(), null);
+                    }
                 }
             }
         }

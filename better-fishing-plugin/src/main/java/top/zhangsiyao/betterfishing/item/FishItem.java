@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.constant.FishKey;
 import top.zhangsiyao.betterfishing.exceptions.InvalidFishException;
 import top.zhangsiyao.betterfishing.reward.Reward;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
@@ -53,6 +54,8 @@ public class FishItem  implements AbstractItem{
 
     String fishName;
 
+    Boolean interactType;
+
     List<Reward> eatRewards=new ArrayList<>();
 
     List<Reward> interactRewards=new ArrayList<>();
@@ -78,6 +81,7 @@ public class FishItem  implements AbstractItem{
         loadMinSize();
         loadRarity();
         loadWeight();
+        loadInteractType();
         itemFactory=new ItemFactory(this,file);
     }
 
@@ -94,7 +98,7 @@ public class FishItem  implements AbstractItem{
     }
 
     private ConfigurationSection getSection(){
-        return fishConfig.getConfigurationSection("fish."+fishName);
+        return fishConfig.getConfigurationSection(FishKey.root).getConfigurationSection(fishName);
     }
 
     public ItemStack give(Player player, int randomIndex) {
@@ -128,57 +132,57 @@ public class FishItem  implements AbstractItem{
     }
 
     public void loadWeight(){
-        weight=getSection().getDouble("weight",10.0);
+        weight=getSection().getDouble(FishKey.weight,10.0);
     }
 
     private void loadDisplayName(){
-        displayName=getSection().getString("displayName",fishName);
+        displayName=getSection().getString(FishKey.display_name,fishName);
     }
 
     private void loadLore(){
-        lore=getSection().getStringList("lore");
+        lore=getSection().getStringList(FishKey.lore);
     }
 
     private void loadDurability(){
-        durability=getSection().getInt("durability",0);
+        durability=getSection().getInt(FishKey.durability,0);
     }
 
     private void loadEatEvent(){
-        List<String> rewards = getSection().getStringList("eat-event");
+        List<String> rewards = getSection().getStringList(FishKey.eat_event);
         for(String reward:rewards){
             eatRewards.add(new Reward(reward));
         }
     }
 
     private void loadEffect(){
-        effect=getSection().getString("effect");
+        effect=getSection().getString(FishKey.effect);
     }
 
     private void loadInteractEvent(){
-        List<String> rewards = getSection().getStringList("interact-event");
+        List<String> rewards = getSection().getStringList(FishKey.interact_event);
         for(String reward:rewards){
             interactRewards.add(new Reward(reward));
         }
     }
 
     private void loadItemProperties(){
-        itemProperties=new ItemProperties("fish",fishName,fishConfig);
+        itemProperties=new ItemProperties(FishKey.root,fishName,fishConfig);
     }
 
     private void loadGlowing(){
-        glowing=getSection().getBoolean("glowing",false);
+        glowing=getSection().getBoolean(FishKey.glowing,false);
     }
 
     private void loadMaxSize(){
-        maxPoint =getSection().getDouble("point.max");
+        maxPoint =getSection().getDouble(FishKey.maxPoint);
     }
 
     private void loadMinSize(){
-        minPoint =getSection().getDouble("pint.min");
+        minPoint =getSection().getDouble(FishKey.minPoint);
     }
 
     private void loadRarity(){
-        String r=getSection().getString("rarity");
+        String r=getSection().getString(FishKey.rarity);
         if(r!=null){
             if(BetterFishing.rarityMap.containsKey(r)){
                 rarity= BetterFishing.rarityMap.get(r);
@@ -189,7 +193,13 @@ public class FishItem  implements AbstractItem{
                     e.printStackTrace();
                 }
             }
+        }else {
+            throw new RuntimeException(file.getPath()+"中的鱼："+fishName+"未指定稀有度.");
         }
+    }
+
+    private void loadInteractType(){
+        interactType=getSection().getBoolean(FishKey.interact_type,false);
     }
 
 

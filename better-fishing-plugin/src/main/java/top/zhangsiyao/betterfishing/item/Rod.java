@@ -175,9 +175,15 @@ public class Rod implements AbstractItem {
     }
 
     private void loadRarities(){
+        if(!getSection().contains("rarities")){
+            return;
+        }
         Map<String, Object> values = getSection().getConfigurationSection("rarities").getValues(false);
         Map<String,Integer> result=new HashMap<>();
         for(String key:values.keySet()){
+            if(!BetterFishing.rarityMap.containsKey(key)){
+                throw new RuntimeException("鱼竿："+rodName+"中的稀有度："+key+"不存在");
+            }
             result.put(key,Integer.parseInt(String.valueOf(values.get(key))));
         }
         rarities=result;

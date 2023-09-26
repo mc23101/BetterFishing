@@ -23,7 +23,6 @@ import top.zhangsiyao.betterfishing.item.Rod;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 public class FishUtils {
 

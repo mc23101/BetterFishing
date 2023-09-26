@@ -21,4 +21,10 @@ public class MessageKey {
 
     public final static String command_info="command-info";
 
+    public final static String bait_gui_title="bait-gui-title";
+
+    public final static String fish_gui_title="fish-gui-title";
+
+    public final static String rod_gui_title="rod-gui-title";
+
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.2"
+version = "1.0.3"
 
 description = "A fishing extension bringing an exciting new experience to fishing."
 
@@ -107,7 +107,7 @@ bukkit {
     commands {
         register("betterfishing") {
             usage = "/<command> [name]"
-            aliases = listOf("fishing")
+            aliases = listOf("bf")
         }
     }
 }
