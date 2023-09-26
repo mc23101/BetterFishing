@@ -84,7 +84,10 @@ public class FishingTitleEvent implements Listener {
             event.getPlayer().sendTitle(title,subtitle,10,10,10);
             sentActionBar.put(player.getUniqueId(),false);
             event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,TextComponent.fromLegacyText(""));
-        }else {
+        }else if(event.getState()==PlayerFishEvent.State.IN_GROUND){
+            sentActionBar.put(player.getUniqueId(),false);
+            event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,TextComponent.fromLegacyText(""));
+        } else {
             sentActionBar.put(player.getUniqueId(),true);
         }
     }
