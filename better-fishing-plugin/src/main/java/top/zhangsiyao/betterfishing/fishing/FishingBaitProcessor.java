@@ -95,7 +95,7 @@ public class FishingBaitProcessor implements Listener {
                 }
             }
         }
-        Bukkit.getServer().getPluginManager().callEvent(new FishTitleEvent(fish,event.getState(),event.getPlayer()));
+        Bukkit.getServer().getPluginManager().callEvent(new FishTitleEvent(fish,event.getState(),event.getPlayer(),event.getHook()));
     }
 
 

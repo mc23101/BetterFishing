@@ -5,12 +5,18 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityEnterBlockEvent;
+import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.MessageKey;
 import top.zhangsiyao.betterfishing.event.FishTitleEvent;
@@ -19,13 +25,12 @@ import top.zhangsiyao.betterfishing.item.Rod;
 import top.zhangsiyao.betterfishing.utils.FishUtils;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class FishingTitleEvent implements Listener {
 
     public static Map<UUID,Boolean> sentActionBar=new HashMap<>();
+
     public static Thread sectionBar;
 
     public FishingTitleEvent() {
@@ -60,6 +65,7 @@ public class FishingTitleEvent implements Listener {
     public static void process(FishTitleEvent event) {
         Player player=event.getPlayer();
         player.resetTitle();
+
         //当鱼儿咬住鱼竿时
         if(event.getState()==PlayerFishEvent.State.BITE){
             String title=BetterFishing.messageConfig.get(MessageKey.fish_catch_title);
@@ -91,5 +97,9 @@ public class FishingTitleEvent implements Listener {
             sentActionBar.put(player.getUniqueId(),true);
         }
     }
+
+
+
+
 
 }

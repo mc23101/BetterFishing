@@ -6,9 +6,9 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.3"
+version = "1.0.4"
 
-description = "A fishing extension bringing an exciting new experience to fishing."
+description = "一个拥有自定义钓鱼内容的钓鱼插件."
 
 repositories {
     maven("https://jitpack.io")
