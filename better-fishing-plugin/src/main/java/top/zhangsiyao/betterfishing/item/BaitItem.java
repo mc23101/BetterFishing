@@ -105,6 +105,11 @@ public class BaitItem implements AbstractItem{
         return bait;
     }
 
+    @Override
+    public Boolean getUnbreakable() {
+        return false;
+    }
+
     private ConfigurationSection getSection(){
         return baitConfig.getConfigurationSection(BaitKey.bait_root).getConfigurationSection(baitName);
     }

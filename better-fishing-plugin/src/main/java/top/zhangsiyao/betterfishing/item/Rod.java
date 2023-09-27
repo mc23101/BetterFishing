@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
+import top.zhangsiyao.betterfishing.constant.RodKey;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
@@ -31,6 +32,10 @@ public class Rod implements AbstractItem {
     String fishingSpeed;
 
     String doubleDrop;
+
+    Double mutualityExp;
+
+    Boolean unbreakable;
 
     String extraFish;
 
@@ -65,6 +70,8 @@ public class Rod implements AbstractItem {
         loadFishingSpeed();
         loadRarities();
         loadGlowing();
+        loadMutualityExp();
+        loadUnbreakable();
         itemFactory= new ItemFactory(this,file);
     }
 
@@ -189,6 +196,13 @@ public class Rod implements AbstractItem {
         rarities=result;
     }
 
+    private void loadMutualityExp(){
+        mutualityExp=getSection().getDouble(RodKey.mutuality_exp,1);
+    }
+
+    private void loadUnbreakable(){
+        unbreakable=getSection().getBoolean(RodKey.unbreakable,false);
+    }
 
     private void loadGlowing(){
         glowing=getSection().getBoolean("glowing",false);

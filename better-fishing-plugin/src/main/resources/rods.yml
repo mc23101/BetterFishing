@@ -13,6 +13,10 @@ rods:
     fishing-speed: 0.9
     # 双倍奖励的概率
     double-drop: 0.9
+    # 经验加成
+    mutuality-exp: 2
+    # 不可损坏
+    unbreakable: false
     # 鱼竿是否发光(无属性附魔)
     glowing: true
     # 指定稀有度的增加权重，稀有度必须在rarities.yml中有定义，否则会报错

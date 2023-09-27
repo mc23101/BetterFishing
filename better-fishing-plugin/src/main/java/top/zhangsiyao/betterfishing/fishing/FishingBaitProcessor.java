@@ -38,21 +38,8 @@ public class FishingBaitProcessor implements Listener {
         if(!FishUtils.useBait(rodInHand)){
             return;
         }
-        BaitItem bait=FishUtils.getBaitByRod(rodInHand);
-        if(bait == null || !FishUtils.decreaseBait(event.getPlayer(), bait.getBaitName())){
-            if(bait==null){
-                event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotExistMessage());
-            }else {
-                event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getBaitName()));
-            }
-            NBTItem nbtItem=new NBTItem(rodInHand,true);
-            NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
-            FishUtils.refreshRodLore(rodInHand);
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
-            return;
-        }
 
-
+        event.setExpToDrop((int) (event.getExpToDrop()*rod.getMutualityExp()));
 
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
@@ -67,6 +54,22 @@ public class FishingBaitProcessor implements Listener {
 
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
+
+            BaitItem bait=FishUtils.getBaitByRod(rodInHand);
+            if(bait == null || !FishUtils.decreaseBait(event.getPlayer(), bait.getBaitName())){
+                if(bait==null){
+                    event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotExistMessage());
+                }else {
+                    event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getBaitName()));
+                }
+                NBTItem nbtItem=new NBTItem(rodInHand,true);
+                NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
+                FishUtils.refreshRodLore(rodInHand);
+                Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
+                return;
+            }
+
+
             // 获取掉到的鱼
             fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(), rod,bait);
 

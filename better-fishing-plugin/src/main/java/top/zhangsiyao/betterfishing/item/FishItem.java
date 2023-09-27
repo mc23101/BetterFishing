@@ -122,6 +122,11 @@ public class FishItem  implements AbstractItem{
         return fish;
     }
 
+    @Override
+    public Boolean getUnbreakable() {
+        return false;
+    }
+
     public Float getLength(){
         return 20f;
     }

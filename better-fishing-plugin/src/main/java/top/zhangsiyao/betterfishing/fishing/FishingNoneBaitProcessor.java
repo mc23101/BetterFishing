@@ -39,6 +39,7 @@ public class FishingNoneBaitProcessor implements Listener {
             return;
         }
 
+        event.setExpToDrop((int) (event.getExpToDrop()*rod.getMutualityExp()));
 
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();

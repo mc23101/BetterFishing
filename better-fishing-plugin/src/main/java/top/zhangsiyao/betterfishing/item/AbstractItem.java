@@ -18,5 +18,7 @@ public interface AbstractItem {
 
     ItemStack give(Player player, int randomIndex);
 
+    Boolean getUnbreakable();
+
 
 }

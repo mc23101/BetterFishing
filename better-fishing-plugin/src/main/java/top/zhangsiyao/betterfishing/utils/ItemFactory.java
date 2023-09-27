@@ -21,7 +21,7 @@ import java.util.logging.Level;
 
 public class ItemFactory {
 
-    AbstractItem fishItem;
+    AbstractItem abstractItem;
 
     private File file;
     private ItemStack product;
@@ -32,8 +32,8 @@ public class ItemFactory {
     private boolean rawMaterial;
     private String displayName;
 
-    public ItemFactory(AbstractItem fishItem, File file) {
-        this.fishItem = fishItem;
+    public ItemFactory(AbstractItem abstractItem, File file) {
+        this.abstractItem = abstractItem;
         this.file=file;
         this.product=getType(null);
     }
@@ -47,6 +47,7 @@ public class ItemFactory {
         }
 
 //      applyModelData();
+        applyUnbreakable();
         applyDamage();
         applyDisplayName();
 //        applyDyeColour();
@@ -116,7 +117,7 @@ public class ItemFactory {
 
     private ItemStack checkRandomMaterial(int randomIndex) {
 
-        List<String> lValues = fishItem.getItemProperties().getMaterials();
+        List<String> lValues = abstractItem.getItemProperties().getMaterials();
         if (!lValues.isEmpty()) {
 
             final Random rand = BetterFishing.getInstance().getRandom();
@@ -147,7 +148,7 @@ public class ItemFactory {
     }
 
     private ItemStack checkOwnHead(OfflinePlayer player) {
-        boolean ownHead = fishItem.getItemProperties().getOwnHead();
+        boolean ownHead = abstractItem.getItemProperties().getOwnHead();
         // Causes this to run each turn the create() is called.
         itemRandom = ownHead;
 
@@ -167,11 +168,11 @@ public class ItemFactory {
     }
 
     private ItemStack checkMaterial(){
-        return checkItem(fishItem.getItemProperties().getMaterial());
+        return checkItem(abstractItem.getItemProperties().getMaterial());
     }
 
     private ItemStack checkRawMaterial() {
-        String materialID = fishItem.getItemProperties().getRawMaterial();
+        String materialID = abstractItem.getItemProperties().getRawMaterial();
         if(materialID != null&&!materialID.equals("")) {
             rawMaterial = true;
         }
@@ -206,7 +207,7 @@ public class ItemFactory {
     }
 
     private void applyLore() {
-        List<String> loreConfig = fishItem.getLore();
+        List<String> loreConfig = abstractItem.getLore();
         if (loreConfig.isEmpty()) return;
 
         ItemMeta meta = product.getItemMeta();
@@ -216,8 +217,16 @@ public class ItemFactory {
         product.setItemMeta(meta);
     }
 
+    public void applyUnbreakable(){
+        ItemMeta itemMeta = product.getItemMeta();
+        if(itemMeta!=null){
+            itemMeta.setUnbreakable(this.abstractItem.getUnbreakable());
+            product.setItemMeta(itemMeta);
+        }
+    }
+
     public void applyDamage() {
-        int predefinedDamage = fishItem.getDurability();
+        int predefinedDamage = abstractItem.getDurability();
         if (predefinedDamage >= 0 && predefinedDamage <= 100) {
             product.setDurability((short) (predefinedDamage / 100.0 * product.getType().getMaxDurability()));
         } else {
@@ -229,7 +238,7 @@ public class ItemFactory {
     }
 
     private void applyDisplayName() {
-        String displayName = fishItem.getDisplayName();
+        String displayName = abstractItem.getDisplayName();
 
         if (displayName == null && this.displayName != null) displayName = this.displayName;
 
@@ -245,13 +254,13 @@ public class ItemFactory {
     }
 
     private void applyGlow() {
-        if (fishItem.getGlowing()) {
+        if (abstractItem.getGlowing()) {
             this.product.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }
     }
 
     private void applyPotionMeta() {
-        String potionSettings = fishItem.getItemProperties().getPotion();
+        String potionSettings = abstractItem.getItemProperties().getPotion();
 
         if (potionSettings == null) return;
         if (!(product.getItemMeta() instanceof PotionMeta)) return;
@@ -279,14 +288,14 @@ public class ItemFactory {
 
         if (meta != null) {
 //            if (itemDyeCheck) meta.addItemFlags(ItemFlag.HIDE_DYE);
-            if (fishItem.getGlowing()) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            if (abstractItem.getGlowing()) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.product.setItemMeta(meta);
         }
     }
 
 
 //    public void applyDyeColour() {
-//        String dyeColour = fishItem
+//        String dyeColour = abstractItem
 //
 //        if (dyeColour != null) {
 //            try {
