@@ -4,6 +4,7 @@ package top.zhangsiyao.betterfishing.event;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -22,10 +23,13 @@ public class FishTitleEvent extends Event {
 
     private Player player;
 
-    public FishTitleEvent(ItemStack fish, PlayerFishEvent.State state,Player player) {
+    private FishHook fishHook;
+
+    public FishTitleEvent(ItemStack fish, PlayerFishEvent.State state,Player player,FishHook fishHook) {
         this.fish=fish;
         this.state=state;
         this.player=player;
+        this.fishHook=fishHook;
     }
     public static HandlerList getHandlerList() {
         return handlers;
