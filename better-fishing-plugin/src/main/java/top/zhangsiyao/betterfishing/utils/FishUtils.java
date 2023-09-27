@@ -1,13 +1,6 @@
 package top.zhangsiyao.betterfishing.utils;
 
-import br.net.fabiozumbi12.RedProtect.Bukkit.RedProtect;
-import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
-import com.sk89q.worldguard.protection.regions.RegionQuery;
+
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -54,7 +47,7 @@ public class FishUtils {
 
     public static boolean isBait(ItemStack itemStack){
         NBTItem nbtItem=new NBTItem(itemStack);
-        if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME)){
+        if(itemStack.getType().equals(Material.AIR) || !NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME)){
             return false;
         }else {
             return true;
@@ -141,41 +134,42 @@ public class FishUtils {
 
     public static boolean checkRegion(Location l, List<String> whitelistedRegions) {
         // if there's any region plugin installed
-        if (BetterFishing.guardPL == null) {
-            return true;
-        }
-        // if the user has defined a region whitelist
-        if (whitelistedRegions.isEmpty()) {
-            return true;
-        }
-
-        if (BetterFishing.guardPL.equals("worldguard")) {
-
-            // Creates a query for whether the player is stood in a protectedregion defined by the user
-            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            RegionQuery query = container.createQuery();
-            ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(l));
-
-            // runs the query
-            for (ProtectedRegion pr : set) {
-                if (whitelistedRegions.contains(pr.getId())) {
-                    return true;
-                }
-            }
-            return false;
-        } else if (BetterFishing.guardPL.equals("redprotect")) {
-            Region r = RedProtect.get().getAPI().getRegion(l);
-            // if the hook is in any redprotect region
-            if (r != null) {
-                // if the hook is in a whitelisted region
-                return whitelistedRegions.contains(r.getName());
-            }
-            return false;
-        } else {
-            // the user has defined a region whitelist but doesn't have a region plugin.
-            BetterFishing.logger.log(Level.WARNING, "Please install WorldGuard or RedProtect to enable region-specific fishing.");
-            return true;
-        }
+//        if (BetterFishing.guardPL == null) {
+//            return true;
+//        }
+//        // if the user has defined a region whitelist
+//        if (whitelistedRegions.isEmpty()) {
+//            return true;
+//        }
+//
+//        if (BetterFishing.guardPL.equals("worldguard")) {
+//
+//            // Creates a query for whether the player is stood in a protectedregion defined by the user
+//            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+//            RegionQuery query = container.createQuery();
+//            ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(l));
+//
+//            // runs the query
+//            for (ProtectedRegion pr : set) {
+//                if (whitelistedRegions.contains(pr.getId())) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        } else if (BetterFishing.guardPL.equals("redprotect")) {
+//            Region r = RedProtect.get().getAPI().getRegion(l);
+//            // if the hook is in any redprotect region
+//            if (r != null) {
+//                // if the hook is in a whitelisted region
+//                return whitelistedRegions.contains(r.getName());
+//            }
+//            return false;
+//        } else {
+//            // the user has defined a region whitelist but doesn't have a region plugin.
+//            BetterFishing.logger.log(Level.WARNING, "Please install WorldGuard or RedProtect to enable region-specific fishing.");
+//            return true;
+//        }
+        return true;
     }
 
     public static boolean checkWorld(Location l) {

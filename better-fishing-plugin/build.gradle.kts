@@ -35,13 +35,6 @@ dependencies {
     compileOnly(libs.spigot.api)
     compileOnly(libs.vault.api)
     compileOnly(libs.placeholder.api)
-    compileOnly(libs.authlib)
-    compileOnly(libs.worldguard.core) {
-        exclude("com.sk89q.worldedit", "worldedit-core")
-    }
-    compileOnly(libs.worldguard.bukkit)
-    compileOnly(libs.worldedit.core)
-    compileOnly(libs.worldedit.bukkit)
 
     compileOnly(libs.redprotect.core) {
         exclude("net.ess3", "EssentialsX")
@@ -56,17 +49,12 @@ dependencies {
         exclude("com.sk89q.worldedit", "worldedit-bukkit")
         exclude("com.sk89q.worldguard", "worldguard-bukkit")
     }
-    compileOnly(libs.aurelium.skills)
-    compileOnly(libs.griefprevention)
-    compileOnly(libs.mcmmo)
-    compileOnly(libs.headdatabase.api)
 
     compileOnly(libs.lombok)
 
 
 
     implementation(libs.nbt.api)
-    implementation(libs.bstats)
 
     annotationProcessor(libs.lombok)
 
@@ -74,7 +62,6 @@ dependencies {
     library(libs.flyway.core)
     library(libs.flyway.mysql)
     library(libs.hikaricp)
-    library(libs.caffeine)
     library(libs.commons.lang3)
     library(libs.commons.codec)
     library(libs.json.simple)
@@ -90,16 +77,8 @@ bukkit {
 
     depend = listOf("Vault")
     softDepend = listOf(
-        "WorldGuard",
         "PlaceholderAPI",
         "RedProtect",
-        "mcMMO",
-        "AureliumSkills",
-        "ItemsAdder",
-        "Denizens",
-        "EcoItems",
-        "Oraxen",
-        "HeadDatabase"
     )
     loadBefore = listOf("AntiAC")
     apiVersion = "1.13"

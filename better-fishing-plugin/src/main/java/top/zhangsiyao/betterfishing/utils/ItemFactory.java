@@ -72,7 +72,7 @@ public class ItemFactory {
 //        ItemStack oneHeadUUID = checkRandomHeadUUID(randomIndex);
 //        if (oneHeadUUID != null) return oneHeadUUID;
 
-        return new ItemStack(Material.COD);
+        return new ItemStack(Material.STONE);
     }
 
     public ItemStack getType(OfflinePlayer player) {
@@ -109,7 +109,7 @@ public class ItemFactory {
         if (rawMaterial != null) return rawMaterial;
 
         // The fish has no item type specified
-        return new ItemStack(Material.COD);
+        return new ItemStack(Material.STONE);
 
     }
 
@@ -137,7 +137,7 @@ public class ItemFactory {
                     }
                 }
 
-                return new ItemStack(Material.COD);
+                return new ItemStack(Material.STONE);
             } else {
                 return new ItemStack(m);
             }
@@ -152,13 +152,13 @@ public class ItemFactory {
         itemRandom = ownHead;
 
         if (ownHead && player != null) {
-            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+            ItemStack skull = new ItemStack(Material.SKULL);
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
 
             if (meta != null) {
                 meta.setOwningPlayer(player);
             } else {
-                return new ItemStack(Material.COD);
+                return new ItemStack(Material.STONE);
             }
 
             skull.setItemMeta(meta);
@@ -189,7 +189,7 @@ public class ItemFactory {
             BetterFishing.logger.severe(() -> String.format("%s 有一个错误的材质名称: %s",
                     file.getName(),
                     materialID));
-            return new ItemStack(Material.COD);
+            return new ItemStack(Material.STONE);
         }
     }
 
@@ -199,7 +199,7 @@ public class ItemFactory {
             BetterFishing.logger.severe(() -> String.format("%s 有一个错误的材质名称: %s",
                     file.getName(),
                     materialString));
-            return new ItemStack(Material.COD);
+            return new ItemStack(Material.STONE);
         }
 
         return new ItemStack(material);

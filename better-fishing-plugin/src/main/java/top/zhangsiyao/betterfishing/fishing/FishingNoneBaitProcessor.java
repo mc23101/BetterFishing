@@ -3,6 +3,7 @@ package top.zhangsiyao.betterfishing.fishing;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,8 +47,7 @@ public class FishingNoneBaitProcessor implements Listener {
             maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
             minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
         }
-        event.getHook().setMinWaitTime(minTime);
-        event.getHook().setMaxWaitTime(maxTime);
+        event.getHook().setBiteChance(1);
 
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
@@ -73,7 +73,7 @@ public class FishingNoneBaitProcessor implements Listener {
             // 替换获取的物品
             Item nonCustom = (Item) event.getCaught();
             if (nonCustom != null) {
-                if (fish.getType().isAir()) {
+                if (fish.getType().equals(Material.AIR)) {
                     nonCustom.remove();
                 } else {
                     nonCustom.setItemStack(fish);
