@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
-import top.zhangsiyao.betterfishing.constant.NbtConstant;
 import top.zhangsiyao.betterfishing.constant.RodKey;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
@@ -114,7 +113,7 @@ public class Rod implements AbstractItem {
 
 
     private ConfigurationSection getSection(){
-        return rodConfig.getConfigurationSection("rods."+rodName);
+        return rodConfig.getConfigurationSection(RodKey.rod_root).getConfigurationSection(rodName);
     }
 
 
@@ -122,7 +121,7 @@ public class Rod implements AbstractItem {
      * 获取鱼竿displayName
      * */
     private void loadDisplayName(){
-        displayName=getSection().getString("displayName",rodName);
+        displayName=getSection().getString(RodKey.displayName,rodName);
     }
 
 
@@ -130,7 +129,7 @@ public class Rod implements AbstractItem {
      * 获取鱼竿的lore标签
      * */
     private void loadLore(){
-        lore=getSection().getStringList("lore");
+        lore=getSection().getStringList(RodKey.lore);
     }
 
 
@@ -138,7 +137,7 @@ public class Rod implements AbstractItem {
      * 获取鱼竿额外凋落物的配置文件名称
      * */
     private void  loadExtraFish(){
-        extraFish=getSection().getString(NbtConstant.EXTRA_FISH);
+        extraFish=getSection().getString(RodKey.extra_fish);
         if(extraFish==null){
             return;
         }
@@ -148,7 +147,7 @@ public class Rod implements AbstractItem {
     }
 
     private void loadDoubleDrop(){
-        doubleDrop=getSection().getString(NbtConstant.DOUBLE_DROP);
+        doubleDrop=getSection().getString(RodKey.double_drop);
         if(doubleDrop==null){
             return;
         }
@@ -165,7 +164,7 @@ public class Rod implements AbstractItem {
     }
 
     private void loadFishingSpeed(){
-        fishingSpeed=getSection().getString(NbtConstant.FISHING_SPEED);
+        fishingSpeed=getSection().getString(RodKey.fishing_speed);
         if(fishingSpeed==null){
             return ;
         }
@@ -185,7 +184,7 @@ public class Rod implements AbstractItem {
         if(!getSection().contains("rarities")){
             return;
         }
-        Map<String, Object> values = getSection().getConfigurationSection("rarities").getValues(false);
+        Map<String, Object> values = getSection().getConfigurationSection(RodKey.rarities).getValues(false);
         Map<String,Integer> result=new HashMap<>();
         for(String key:values.keySet()){
             if(!BetterFishing.rarityMap.containsKey(key)){
@@ -205,7 +204,7 @@ public class Rod implements AbstractItem {
     }
 
     private void loadGlowing(){
-        glowing=getSection().getBoolean("glowing",false);
+        glowing=getSection().getBoolean(RodKey.glowing,false);
     }
 
     @Override
