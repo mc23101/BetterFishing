@@ -8,10 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import top.zhangsiyao.betterfishing.command.Command;
 import top.zhangsiyao.betterfishing.config.*;
-import top.zhangsiyao.betterfishing.event.FishBlockPlaceEvent;
-import top.zhangsiyao.betterfishing.event.FishEatEvent;
-import top.zhangsiyao.betterfishing.event.FishInteractEvent;
-import top.zhangsiyao.betterfishing.event.RodSetBaitEvent;
+import top.zhangsiyao.betterfishing.event.*;
 import top.zhangsiyao.betterfishing.fishing.FishingBaitProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
@@ -115,6 +112,8 @@ public class BetterFishing extends JavaPlugin {
      * 注册基本监听器
      * */
     private void listeners() {
+        getServer().getPluginManager().registerEvents(new RodPrepareEnchantEvent(),this);
+        getServer().getPluginManager().registerEvents(new BaitItemCraftEvent(),this);
         getServer().getPluginManager().registerEvents(new RodGui(),this);
         getServer().getPluginManager().registerEvents(new FishingNoneBaitProcessor(), this);
         getServer().getPluginManager().registerEvents(new FishingBaitProcessor(),this);

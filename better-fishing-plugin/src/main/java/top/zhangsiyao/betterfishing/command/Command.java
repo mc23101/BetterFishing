@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.MessageKey;
-import top.zhangsiyao.betterfishing.item.BaitItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +36,7 @@ public class Command implements CommandExecutor , TabCompleter {
             player.sendMessage("配置文件重新加载成功");
             player.sendMessage("加载鱼竿："+ BetterFishing.rodMap.size()+"个");
             player.sendMessage("加载鱼饵："+BetterFishing.baitMap.size()+"个");
-            player.sendMessage("加载fish："+BetterFishing.allFishes.keySet()+"个");
+            player.sendMessage("加载fish："+BetterFishing.allFishes.size()+"个");
         } else {
             List<String> commandInfo = BetterFishing.messageConfig.getList(MessageKey.command_info);
             StringBuilder message= new StringBuilder();

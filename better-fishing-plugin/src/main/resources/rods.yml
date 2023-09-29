@@ -13,6 +13,8 @@ rods:
     fishing-speed: 0.9
     # 双倍奖励的概率
     double-drop: 0.9
+    # 钓鱼时，消耗的饥饿度
+    hungry: 0
     # 经验加成
     mutuality-exp: 2
     # 不可损坏

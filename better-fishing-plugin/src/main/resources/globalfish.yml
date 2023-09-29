@@ -16,6 +16,8 @@ fish:
       # raw-material: 原始材质
       # materials: 随机材质
       # potion: 药水效果，材质为药水时生效
+    # "鱼"的权重，权重越大，被钓到的概率越高
+    weight: 10.0
     # "鱼"的lore
     lore:
       - "第一行Lore"

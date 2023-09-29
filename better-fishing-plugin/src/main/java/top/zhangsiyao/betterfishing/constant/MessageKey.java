@@ -27,4 +27,7 @@ public class MessageKey {
 
     public final static String rod_gui_title="rod-gui-title";
 
+
+    public final static String bait_cant_craft="bait-cant-craft";
+
 }

@@ -27,9 +27,10 @@ import java.util.logging.Level;
 public class FishUtils {
 
 
-
-
     public static Rod getRod(ItemStack stack){
+        if(stack==null||stack.getType().equals(Material.AIR)){
+            return null;
+        }
         NBTItem nbtItem=new NBTItem(stack);
         if(!NbtUtils.hasKey(nbtItem,NbtConstant.ROD_NAME)){
             return null;
@@ -41,26 +42,35 @@ public class FishUtils {
         return BetterFishing.rodMap.get(rodName);
     }
 
+    public static boolean isRod(ItemStack stack){
+        if(stack==null||stack.getType().equals(Material.AIR)){
+            return false;
+        }
+        NBTItem nbtItem=new NBTItem(stack);
+        return NbtUtils.hasKey(nbtItem,NbtConstant.ROD_NAME);
+    }
+
 
     public static boolean useBait(ItemStack itemStack){
-        NBTItem nbtItem=new NBTItem(itemStack);
-        if(itemStack.getType().equals(Material.AIR) || !NbtUtils.hasKey(nbtItem, NbtConstant.USE_BAIT_NAME)){
+        if(itemStack==null||itemStack.getType().equals(Material.AIR)){
             return false;
-        }else {
-            return true;
         }
+        NBTItem nbtItem=new NBTItem(itemStack);
+        return NbtUtils.hasKey(nbtItem, NbtConstant.USE_BAIT_NAME);
     }
 
     public static boolean isBait(ItemStack itemStack){
-        NBTItem nbtItem=new NBTItem(itemStack);
-        if(itemStack.getType().isAir() || !NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME)){
+        if(itemStack==null||itemStack.getType().equals(Material.AIR)){
             return false;
-        }else {
-            return true;
         }
+        NBTItem nbtItem=new NBTItem(itemStack);
+        return NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME);
     }
 
     public static BaitItem getBait(ItemStack baitItemstack){
+        if(baitItemstack==null||baitItemstack.getType().equals(Material.AIR)){
+            return null;
+        }
         NBTItem nbtItem=new NBTItem(baitItemstack);
         if(!isBait(baitItemstack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME))){
             return null;
@@ -70,6 +80,9 @@ public class FishUtils {
     }
 
     public static BaitItem getBaitByRod(ItemStack rodItemStack){
+        if(rodItemStack==null||rodItemStack.getType().equals(Material.AIR)){
+            return null;
+        }
         NBTItem nbtItem=new NBTItem(rodItemStack);
         if(!useBait(rodItemStack)||!BetterFishing.baitMap.containsKey(NbtUtils.getString(nbtItem,NbtConstant.USE_BAIT_NAME))){
             return null;
@@ -80,6 +93,9 @@ public class FishUtils {
 
 
     public static void refreshRodLore(ItemStack itemStack){
+        if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.hasItemMeta()) {
+            return;
+        }
         Rod rod=getRod(itemStack);
         if(rod==null){
             return;
@@ -100,7 +116,7 @@ public class FishUtils {
 
     public static boolean decreaseBait(Player player,String baitName){
         for (ItemStack itemStack : player.getInventory()) {
-           if(itemStack!=null){
+           if(itemStack!=null&&!itemStack.getType().equals(Material.AIR)){
               NBTItem nbtItem=new NBTItem(itemStack);
               if(NbtUtils.hasKey(nbtItem,NbtConstant.BF_BAIT_NAME)){
                   String name=NbtUtils.getString(nbtItem,NbtConstant.BF_BAIT_NAME);
