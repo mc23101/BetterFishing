@@ -51,6 +51,7 @@ public class FishingNoneBaitProcessor implements Listener {
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
 
+
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
 
@@ -100,19 +101,7 @@ public class FishingNoneBaitProcessor implements Listener {
 
         FishItem fish;
 
-        Map<BRarity,List<FishItem>> curFish=new HashMap<>(BetterFishing.globalRarityFishes);
-
-        if(fishingRod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(fishingRod.getExtraFish())){
-            Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(fishingRod.getExtraFish());
-            for(BRarity r:map.keySet()){
-                if(curFish.containsKey(r)){
-                    curFish.get(r).addAll(map.get(r));
-                }else {
-                    curFish.put(r,new ArrayList<>(map.get(r)));
-                }
-            }
-        }
-
+        Map<BRarity,List<FishItem>> curFish=FishUtils.getCurFish(fishingRod);
 
         BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet());
         if (fishRarity == null) {

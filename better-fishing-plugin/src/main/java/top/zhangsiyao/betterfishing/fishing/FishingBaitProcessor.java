@@ -4,6 +4,7 @@ package top.zhangsiyao.betterfishing.fishing;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,25 +51,24 @@ public class FishingBaitProcessor implements Listener {
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
-
-
+        BaitItem bait=FishUtils.getBaitByRod(rodInHand);
+        if(bait==null){
+            Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
+            return;
+        }
+        ItemStack baitItemStack= FishUtils.getBait(event.getPlayer(), bait.getBaitName());
+        if(baitItemStack.getType().equals(Material.AIR)){
+            event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getBaitName()));
+            NBTItem nbtItem=new NBTItem(rodInHand,true);
+            NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
+            FishUtils.refreshRodLore(rodInHand);
+            Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
+            return;
+        }
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
 
-            BaitItem bait=FishUtils.getBaitByRod(rodInHand);
-            if(bait == null || !FishUtils.decreaseBait(event.getPlayer(), bait.getBaitName())){
-                if(bait==null){
-                    event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotExistMessage());
-                }else {
-                    event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getBaitName()));
-                }
-                NBTItem nbtItem=new NBTItem(rodInHand,true);
-                NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
-                FishUtils.refreshRodLore(rodInHand);
-                Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
-                return;
-            }
-
+            baitItemStack.setAmount(baitItemStack.getAmount() - 1);
 
             // 获取掉到的鱼
             fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(), rod,bait);
@@ -117,18 +117,7 @@ public class FishingBaitProcessor implements Listener {
         }
 
         FishItem fish;
-        Map<BRarity,List<FishItem>> curFish=new HashMap<>(BetterFishing.globalRarityFishes);
-
-        if(rod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(rod.getExtraFish())){
-            Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(rod.getExtraFish());
-            for(BRarity r:map.keySet()){
-                if(curFish.containsKey(r)){
-                    curFish.get(r).addAll(map.get(r));
-                }else {
-                    curFish.put(r,new ArrayList<>(map.get(r)));
-                }
-            }
-        }
+        Map<BRarity,List<FishItem>> curFish=FishUtils.getCurFish(rod);
 
         BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet(),rod,bait);
         if (fishRarity == null) {
@@ -173,7 +162,7 @@ public class FishingBaitProcessor implements Listener {
         FishItem returningFish;
 
         // 检查是否需要为鱼做权重计算
-        returningFish = randomWeightedFish(available, boostRate, boostedFish,rod,bait);
+        returningFish = randomWeightedFish(available, boostRate, boostedFish, bait);
 
         return returningFish;
     }
@@ -237,7 +226,7 @@ public class FishingBaitProcessor implements Listener {
     /**
      * 权重法获取钓鱼结果
      * */
-    private static FishItem randomWeightedFish(List<FishItem> fishList, double boostRate, List<FishItem> boostedFish,Rod rod,BaitItem bait) {
+    private static FishItem randomWeightedFish(List<FishItem> fishList, double boostRate, List<FishItem> boostedFish, BaitItem bait) {
         double totalWeight = 0;
 
         Set<FishItem> addFishWeight=bait==null?new HashSet<>():new HashSet<>(bait.getFish());

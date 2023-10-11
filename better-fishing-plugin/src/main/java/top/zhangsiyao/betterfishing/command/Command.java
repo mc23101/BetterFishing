@@ -37,7 +37,9 @@ public class Command implements CommandExecutor , TabCompleter {
             player.sendMessage("加载鱼竿："+ BetterFishing.rodMap.size()+"个");
             player.sendMessage("加载鱼饵："+BetterFishing.baitMap.size()+"个");
             player.sendMessage("加载fish："+BetterFishing.allFishes.size()+"个");
-        } else {
+        }else if(args.length>0&&args[0].equals("info")){
+            new InfoCommand(plugin).onCommand(sender,command,label,args);
+        }else {
             List<String> commandInfo = BetterFishing.messageConfig.getList(MessageKey.command_info);
             StringBuilder message= new StringBuilder();
             for(String m:commandInfo){
@@ -56,7 +58,7 @@ public class Command implements CommandExecutor , TabCompleter {
         }
         Player player=(Player) sender;
         if(args.length==1){
-            return new ArrayList<>(Arrays.asList("give","gui","shop","reload"));
+            return new ArrayList<>(Arrays.asList("give","gui","shop","reload","info"));
         }else if(args[0].equals("give")&&player.isOp()){
             if(args.length==2){
                 return new ArrayList<>(Arrays.asList("rod","bait","fish"));

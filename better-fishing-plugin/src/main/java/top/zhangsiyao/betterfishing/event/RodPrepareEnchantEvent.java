@@ -1,7 +1,6 @@
 package top.zhangsiyao.betterfishing.event;
 
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,11 +23,9 @@ public class RodPrepareEnchantEvent implements Listener {
     public void processAnvil(PrepareAnvilEvent event){
         for(ItemStack item:event.getInventory()){
             if(FishUtils.isRod(item)){
-                HumanEntity viewer = event.getView().getPlayer();
-                if(viewer instanceof Player){
-                    viewer.closeInventory();
-                    viewer.sendMessage("不推荐你附魔这个鱼竿哦！强行附魔会使这个鱼竿失效");
-                }
+                event.getInventory().setRepairCost(9999);
+                event.getInventory().setRepairCostAmount(9999);
+                event.setResult(new ItemStack(Material.AIR));
             }
         }
     }

@@ -14,6 +14,7 @@ import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
 import top.zhangsiyao.betterfishing.gui.BaitGui;
 import top.zhangsiyao.betterfishing.gui.FishGui;
+import top.zhangsiyao.betterfishing.gui.FishItemsGui;
 import top.zhangsiyao.betterfishing.gui.RodGui;
 import top.zhangsiyao.betterfishing.item.BRarity;
 import top.zhangsiyao.betterfishing.item.BaitItem;
@@ -112,6 +113,7 @@ public class BetterFishing extends JavaPlugin {
      * 注册基本监听器
      * */
     private void listeners() {
+        getServer().getPluginManager().registerEvents(new FishItemsGui(),this);
         getServer().getPluginManager().registerEvents(new RodPrepareEnchantEvent(),this);
         getServer().getPluginManager().registerEvents(new BaitItemCraftEvent(),this);
         getServer().getPluginManager().registerEvents(new RodGui(),this);

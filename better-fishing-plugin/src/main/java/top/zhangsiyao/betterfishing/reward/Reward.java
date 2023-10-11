@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import top.zhangsiyao.betterfishing.BetterFishing;
+import top.zhangsiyao.betterfishing.utils.FishUtils;
+import top.zhangsiyao.betterfishing.utils.MaterialUtils;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -101,10 +103,9 @@ public class Reward {
                 break;
             case ITEM:
                 if (p != null) {
-                    String[] parsedItem = action.split(",");
-                    //FishUtils.giveItems(Collections.singletonList(new ItemStack(Material.getMaterial(parsedItem[0]), Integer.parseInt(parsedItem[1]))), p);
+                    String[] parsedItem = action.split(" ");
+                    FishUtils.giveItems(Collections.singletonList(new ItemStack(MaterialUtils.getMaterial(parsedItem[0]),parsedItem.length>1?Integer.parseInt(parsedItem[1]):1)), p);
                 }
-
                 break;
             case MESSAGE:
                 if (p != null) {
@@ -118,6 +119,10 @@ public class Reward {
             default:
                 BetterFishing.logger.log(Level.SEVERE, "执行奖励发生异常.");
         }
+    }
+
+    public RewardType getType() {
+        return type;
     }
 
     public void setFishVelocity(Vector fishVelocity) {
