@@ -104,7 +104,7 @@ public class Reward {
             case ITEM:
                 if (p != null) {
                     String[] parsedItem = action.split(" ");
-                    FishUtils.giveItems(Collections.singletonList(new ItemStack(MaterialUtils.getMaterial(parsedItem[0]),parsedItem.length>1?Integer.parseInt(parsedItem[1]):1)), p);
+                    FishUtils.giveItems(Collections.singletonList(new ItemStack(MaterialUtils.getMaterial(parsedItem[0].toUpperCase()),parsedItem.length>1?Integer.parseInt(parsedItem[1]):1)), p);
                 }
                 break;
             case MESSAGE:

@@ -33,6 +33,14 @@ public class NbtUtils {
         bfCompound.removeKey(key);
     }
 
+    public static void setModelValue(final @NotNull NBTCompound nbtCompound, final String value){
+        nbtCompound.setString(NbtConstant.MODEL,value);
+    }
+
+    public static void getModelValue(final @NotNull NBTCompound nbtCompound){
+        nbtCompound.getString(NbtConstant.MODEL);
+    }
+
     /**
      * Returns the NBT Version of the item
      * It does not mean that this is an emf item.

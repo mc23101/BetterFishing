@@ -1,5 +1,6 @@
 package top.zhangsiyao.betterfishing.utils;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -11,7 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import top.zhangsiyao.betterfishing.BetterFishing;
-import top.zhangsiyao.betterfishing.item.AbstractItem;
+import top.zhangsiyao.betterfishing.item.IItem;
 
 import java.io.File;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.logging.Level;
 
 public class ItemFactory {
 
-    AbstractItem abstractItem;
+    IItem iItem;
 
     private File file;
     private ItemStack product;
@@ -32,8 +33,8 @@ public class ItemFactory {
     private boolean rawMaterial;
     private String displayName;
 
-    public ItemFactory(AbstractItem abstractItem, File file) {
-        this.abstractItem = abstractItem;
+    public ItemFactory(IItem iItem, File file) {
+        this.iItem = iItem;
         this.file=file;
         this.product=getType(null);
     }
@@ -46,7 +47,7 @@ public class ItemFactory {
             else this.product = setType(randomIndex);
         }
 
-//      applyModelData();
+        applyModel();
         applyUnbreakable();
         applyDamage();
         applyDisplayName();
@@ -117,7 +118,7 @@ public class ItemFactory {
 
     private ItemStack checkRandomMaterial(int randomIndex) {
 
-        List<String> lValues = abstractItem.getItemProperties().getMaterials();
+        List<String> lValues = iItem.getItemProperties().getMaterials();
         if (!lValues.isEmpty()) {
 
             final Random rand = BetterFishing.getInstance().getRandom();
@@ -148,7 +149,7 @@ public class ItemFactory {
     }
 
     private ItemStack checkOwnHead(OfflinePlayer player) {
-        boolean ownHead = abstractItem.getItemProperties().getOwnHead();
+        boolean ownHead = iItem.getItemProperties().getOwnHead();
         // Causes this to run each turn the create() is called.
         itemRandom = ownHead;
 
@@ -168,11 +169,11 @@ public class ItemFactory {
     }
 
     private ItemStack checkMaterial(){
-        return checkItem(abstractItem.getItemProperties().getMaterial());
+        return checkItem(iItem.getItemProperties().getMaterial());
     }
 
     private ItemStack checkRawMaterial() {
-        String materialID = abstractItem.getItemProperties().getRawMaterial();
+        String materialID = iItem.getItemProperties().getRawMaterial();
         if(materialID != null&&!materialID.equals("")) {
             rawMaterial = true;
         }
@@ -207,7 +208,7 @@ public class ItemFactory {
     }
 
     private void applyLore() {
-        List<String> loreConfig = abstractItem.getLore();
+        List<String> loreConfig = iItem.getLore();
         if (loreConfig.isEmpty()) return;
 
         ItemMeta meta = product.getItemMeta();
@@ -220,13 +221,13 @@ public class ItemFactory {
     public void applyUnbreakable(){
         ItemMeta itemMeta = product.getItemMeta();
         if(itemMeta!=null){
-            itemMeta.setUnbreakable(this.abstractItem.getUnbreakable());
+            itemMeta.setUnbreakable(this.iItem.getUnbreakable());
             product.setItemMeta(itemMeta);
         }
     }
 
     public void applyDamage() {
-        int predefinedDamage = abstractItem.getDurability();
+        int predefinedDamage = iItem.getDurability();
         if (predefinedDamage >= 0 && predefinedDamage <= 100) {
             product.setDurability((short) (predefinedDamage / 100.0 * product.getType().getMaxDurability()));
         } else {
@@ -238,7 +239,7 @@ public class ItemFactory {
     }
 
     private void applyDisplayName() {
-        String displayName = abstractItem.getDisplayName();
+        String displayName = iItem.getDisplayName();
 
         if (displayName == null && this.displayName != null) displayName = this.displayName;
 
@@ -253,14 +254,24 @@ public class ItemFactory {
         }
     }
 
+    private void applyModel(){
+        if(iItem.getModel()!=null){
+            ItemMeta itemMeta = product.getItemMeta();
+            if (itemMeta!=null){
+                itemMeta.setCustomModelData(iItem.getModel());
+                product.setItemMeta(itemMeta);
+            }
+        }
+    }
+
     private void applyGlow() {
-        if (abstractItem.getGlowing()) {
+        if (iItem.getGlowing()) {
             this.product.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         }
     }
 
     private void applyPotionMeta() {
-        String potionSettings = abstractItem.getItemProperties().getPotion();
+        String potionSettings = iItem.getItemProperties().getPotion();
 
         if (potionSettings == null) return;
         if (!(product.getItemMeta() instanceof PotionMeta)) return;
@@ -288,7 +299,7 @@ public class ItemFactory {
 
         if (meta != null) {
 //            if (itemDyeCheck) meta.addItemFlags(ItemFlag.HIDE_DYE);
-            if (abstractItem.getGlowing()) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            if (iItem.getGlowing()) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             this.product.setItemMeta(meta);
         }
     }

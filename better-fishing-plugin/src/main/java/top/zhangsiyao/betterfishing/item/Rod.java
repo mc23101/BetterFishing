@@ -1,6 +1,7 @@
 package top.zhangsiyao.betterfishing.item;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -14,41 +15,26 @@ import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Rod implements AbstractItem {
+public class Rod extends AbstractItem {
 
-    String rodName;
+    Double fishingSpeed;
 
-    String displayName;
+    Double doubleDrop;
 
-    String fishingSpeed;
-
-    String doubleDrop;
-
-    Double mutualityExp;
-
-    Boolean unbreakable;
+    Double mutualityExp=1.0;
 
     String extraFish;
+    Set<String> extraList=new HashSet<>();
 
     ItemFactory itemFactory;
 
-    Boolean glowing;
-
-    Integer durability=0;
-
-    ItemProperties itemProperties;
-
     FileConfiguration rodConfig;
-
-    List<String> lore=new ArrayList<>();
 
     File file;
 
@@ -57,34 +43,15 @@ public class Rod implements AbstractItem {
     Map<String,Integer> rarities=new HashMap<>();
 
     public Rod(String name, FileConfiguration rodConfig, File file) {
-        this.rodName=name;
+        this.name=name;
         this.rodConfig=rodConfig;
         this.file=file;
         itemProperties=new ItemProperties();
         itemProperties.setMaterial("FISHING_ROD");
-        loadDisplayName();
-        loadExtraFish();
-        loadLore();
-        loadDoubleDrop();
-        loadFishingSpeed();
-        loadRarities();
-        loadGlowing();
-        loadMutualityExp();
-        loadUnbreakable();
+        loadConfigs();
         itemFactory= new ItemFactory(this,file);
     }
 
-    public String getDisplayName() {
-        return TextUtils.translateHexColorCodes(displayName);
-    }
-
-    public List<String> getLore() {
-        List<String> cur=new ArrayList<>();
-        for (String l:lore){
-            cur.add(TextUtils.translateHexColorCodes(l));
-        }
-        return cur;
-    }
 
     public ItemStack give(Player player, int randomIndex) {
 
@@ -94,7 +61,7 @@ public class Rod implements AbstractItem {
 
         if ((rodMeta = rod.getItemMeta()) != null) {
             if (displayName != null) rodMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
-            else rodMeta.setDisplayName(TextUtils.translateHexColorCodes(getRodName()));
+            else rodMeta.setDisplayName(TextUtils.translateHexColorCodes(name));
 
             List<String> newLore=getLore();
 
@@ -112,112 +79,42 @@ public class Rod implements AbstractItem {
     }
 
 
-    private ConfigurationSection getSection(){
-        return rodConfig.getConfigurationSection(RodKey.rod_root).getConfigurationSection(rodName);
-    }
 
-
-    /**
-     * 获取鱼竿displayName
-     * */
-    private void loadDisplayName(){
-        displayName=getSection().getString(RodKey.displayName,rodName);
-    }
-
-
-    /**
-     * 获取鱼竿的lore标签
-     * */
-    private void loadLore(){
-        lore=getSection().getStringList(RodKey.lore);
-    }
-
-
-    /**
-     * 获取鱼竿额外凋落物的配置文件名称
-     * */
-    private void  loadExtraFish(){
-        extraFish=getSection().getString(RodKey.extra_fish);
-        if(extraFish==null){
+    private void loadConfigs(){
+        ConfigurationSection root = Objects.requireNonNull(rodConfig.getConfigurationSection(RodKey.rod_root)).getConfigurationSection(name);
+        if(root==null){
             return;
         }
-        if(BetterFishing.allFishes.containsKey(extraFish)){
-            throw new RuntimeException("名为 "+extraFish+" 的额外掉落物配置文件不存在");
-        }
-    }
-
-    private void loadDoubleDrop(){
-        doubleDrop=getSection().getString(RodKey.double_drop);
-        if(doubleDrop==null){
-            return;
-        }
-        Pattern pattern = Pattern.compile("-?[0-9]+(\\.[0-9]+)?");
-        Matcher isNum = pattern.matcher(doubleDrop);
-        if(!isNum.matches()){
-            throw new RuntimeException();
-        }else {
-            float f=Float.parseFloat(doubleDrop);
-            if(f<0||f>1){
-                throw new RuntimeException();
+        displayName=root.getString(RodKey.displayName,name);
+        lore=root.getStringList(RodKey.lore);
+        extraFish=root.getString(RodKey.extra_fish);
+        extraList.add(extraFish);
+        List<String> etra = root.getStringList(RodKey.extra_list);
+        extraList.addAll(etra);
+        if(extraFish!=null){
+            if(BetterFishing.allFishes.containsKey(extraFish)){
+                throw new RuntimeException("名为 "+extraFish+" 的额外掉落物配置文件不存在");
             }
         }
-    }
-
-    private void loadFishingSpeed(){
-        fishingSpeed=getSection().getString(RodKey.fishing_speed);
-        if(fishingSpeed==null){
-            return ;
-        }
-        Pattern pattern = Pattern.compile("-?[0-9]+(\\.[0-9]+)?");
-        Matcher isNum = pattern.matcher(fishingSpeed);
-        if(!isNum.matches()){
-            throw new RuntimeException();
-        }else {
-            float f=Float.parseFloat(fishingSpeed);
-            if(f<0||f>1){
-                throw new RuntimeException();
+        doubleDrop=root.getDouble(RodKey.double_drop,0);
+        fishingSpeed=root.getDouble(RodKey.fishing_speed,0);
+        if(root.contains("rarities")){
+            Map<String, Object> values = root.getConfigurationSection(RodKey.rarities).getValues(false);
+            Map<String,Integer> result=new HashMap<>();
+            for(String key:values.keySet()){
+                if(!BetterFishing.rarityMap.containsKey(key)){
+                    throw new RuntimeException("鱼竿："+name+"中的稀有度："+key+"不存在");
+                }
+                result.put(key,Integer.parseInt(String.valueOf(values.get(key))));
             }
+            rarities=result;
         }
-    }
-
-    private void loadRarities(){
-        if(!getSection().contains("rarities")){
-            return;
+        mutualityExp=root.getDouble(RodKey.mutuality_exp,1.0);
+        unbreakable=root.getBoolean(RodKey.unbreakable,false);
+        glowing=root.getBoolean(RodKey.glowing,false);
+        if (root.contains(RodKey.model)) {
+            model=root.getInt(RodKey.model);
         }
-        Map<String, Object> values = getSection().getConfigurationSection(RodKey.rarities).getValues(false);
-        Map<String,Integer> result=new HashMap<>();
-        for(String key:values.keySet()){
-            if(!BetterFishing.rarityMap.containsKey(key)){
-                throw new RuntimeException("鱼竿："+rodName+"中的稀有度："+key+"不存在");
-            }
-            result.put(key,Integer.parseInt(String.valueOf(values.get(key))));
-        }
-        rarities=result;
-    }
-
-    private void loadMutualityExp(){
-        mutualityExp=getSection().getDouble(RodKey.mutuality_exp,1);
-    }
-
-    private void loadUnbreakable(){
-        unbreakable=getSection().getBoolean(RodKey.unbreakable,false);
-    }
-
-    private void loadGlowing(){
-        glowing=getSection().getBoolean(RodKey.glowing,false);
-    }
-
-    @Override
-    public String toString() {
-        return "Rod{" +
-                "rodName='" + rodName + '\'' +
-                ", fishingSpeed='" + fishingSpeed + '\'' +
-                ", doubleDrop='" + doubleDrop + '\'' +
-                ", extraFish='" + extraFish + '\'' +
-                ", lore=" + lore +
-                ", nbt=" + nbt +
-                ", Rarities=" + rarities +
-                '}';
     }
 
 

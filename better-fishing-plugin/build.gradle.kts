@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.5"
+version = "1.0.6"
 
 description = "一个拥有自定义钓鱼内容的钓鱼插件."
 
@@ -39,6 +39,7 @@ dependencies {
     compileOnly(libs.worldguard.core) {
         exclude("com.sk89q.worldedit", "worldedit-core")
     }
+    compileOnly(libs.itemsadder.api)
     compileOnly(libs.worldguard.bukkit)
     compileOnly(libs.worldedit.core)
     compileOnly(libs.worldedit.bukkit)
@@ -87,7 +88,6 @@ bukkit {
     version = project.version.toString()
     description = project.description.toString()
     website = "https://github.com/mc23101/BetterFishing"
-
     depend = listOf("Vault")
     softDepend = listOf(
         "WorldGuard",

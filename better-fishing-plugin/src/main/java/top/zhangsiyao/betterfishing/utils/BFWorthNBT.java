@@ -13,13 +13,8 @@ public class BFWorthNBT {
     public static ItemStack setFishNBT(ItemStack fishItem, FishItem fish) {
         // creates key and plops in the value of "value"
         NBTItem nbtItem = new NBTItem(fishItem);
-
         NBTCompound bfCompound = nbtItem.getOrCreateCompound(NbtConstant.BF_COMPOUND);
-        if (fish.getLength() > 0)
-            bfCompound.setFloat(NbtConstant.BF_FISH_LENGTH, fish.getLength());
-        if ( fish.getFisherman() != null)
-            bfCompound.setString(NbtConstant.BF_FISH_PLAYER, fish.getFisherman().toString());
-        bfCompound.setString(NbtConstant.BF_FISH_NAME, fish.getFishName());
+        bfCompound.setString(NbtConstant.BF_FISH_NAME, fish.getName());
         bfCompound.setInteger(NbtConstant.BF_FISH_RANDOM_INDEX, fish.getItemFactory().getChosenRandomIndex());
         return nbtItem.getItem();
     }
@@ -27,14 +22,14 @@ public class BFWorthNBT {
     public static ItemStack setBaitNBT(ItemStack baitItem, BaitItem bait){
         NBTItem nbtItem = new NBTItem(baitItem);
         NBTCompound bfCompound = nbtItem.getOrCreateCompound(NbtConstant.BF_COMPOUND);
-        bfCompound.setString(NbtConstant.BF_BAIT_NAME,bait.getBaitName());
+        bfCompound.setString(NbtConstant.BF_BAIT_NAME,bait.getName());
         return nbtItem.getItem();
     }
 
     public static ItemStack setRodNBT(ItemStack rodItem, Rod rod){
         NBTItem nbtItem = new NBTItem(rodItem);
         NBTCompound bfCompound = nbtItem.getOrCreateCompound(NbtConstant.BF_COMPOUND);
-        bfCompound.setString(NbtConstant.ROD_NAME,rod.getRodName());
+        bfCompound.setString(NbtConstant.ROD_NAME,rod.getName());
         return nbtItem.getItem();
     }
 

@@ -82,7 +82,7 @@ public class FishItemsGui implements Listener {
         }
         ItemStack item = inventory.getItem(53);
         NBTItem nbtItem= new NBTItem(item);
-        NbtUtils.setString(nbtItem,NbtConstant.BF_FISH_NAME,fishItem.getFishName());
+        NbtUtils.setString(nbtItem,NbtConstant.BF_FISH_NAME,fishItem.getName());
         inventory.setItem(53,nbtItem.getItem());
         return inventory;
     }

@@ -1,5 +1,6 @@
 package top.zhangsiyao.betterfishing.command;
 
+import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -39,7 +40,10 @@ public class Command implements CommandExecutor , TabCompleter {
             player.sendMessage("加载fish："+BetterFishing.allFishes.size()+"个");
         }else if(args.length>0&&args[0].equals("info")){
             new InfoCommand(plugin).onCommand(sender,command,label,args);
-        }else {
+        }else if(args.length>0&&args[0].equals("test")){
+            CustomStack stack = CustomStack.getInstance("warrior_sword_shiny");
+            player.sendMessage(String.valueOf(stack==null));
+        } else {
             List<String> commandInfo = BetterFishing.messageConfig.getList(MessageKey.command_info);
             StringBuilder message= new StringBuilder();
             for(String m:commandInfo){

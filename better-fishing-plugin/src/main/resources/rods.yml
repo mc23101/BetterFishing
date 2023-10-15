@@ -9,6 +9,8 @@ rods:
       - "&b&l它可以极大减少钓鱼的周期"
       - "&b&l它有非常大的概率获取双倍奖励"
       - "&b&l总之，它就是很厉害"
+    # 物品模型
+    model: 1004
     # 鱼竿的钓鱼速度，该值越大，钓鱼的速度越快
     fishing-speed: 0.9
     # 双倍奖励的概率
@@ -27,3 +29,6 @@ rods:
       Common: 30
     # 该鱼竿的额外掉落物，在extrafish目录中配置，名字为文件内部的 name属性
     extra-fish: fish1
+    extra-list:
+      - "fish1"
+      - "fish2"

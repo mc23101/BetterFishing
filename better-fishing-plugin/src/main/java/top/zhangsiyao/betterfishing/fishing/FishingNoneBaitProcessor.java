@@ -39,14 +39,15 @@ public class FishingNoneBaitProcessor implements Listener {
             return;
         }
 
-        event.setExpToDrop((int) (event.getExpToDrop()*rod.getMutualityExp()));
+        double mu=rod.getMutualityExp()==null?1.0:rod.getMutualityExp();
+        event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
         int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
         if(rod.getFishingSpeed() != null){
-            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
-            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
+            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
+            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
@@ -67,7 +68,7 @@ public class FishingNoneBaitProcessor implements Listener {
             if (rod.getDoubleDrop() != null) {
                 Random rand = new Random();
                 float randDouble = rand.nextFloat();
-                if (randDouble <= Float.parseFloat(rod.getDoubleDrop())) {
+                if (randDouble <= rod.getDoubleDrop()) {
                     fish.setAmount(2);
                     event.getPlayer().sendMessage("恭喜你获得双倍奖励!");
                 }
@@ -114,7 +115,6 @@ public class FishingNoneBaitProcessor implements Listener {
             BetterFishing.logger.log(Level.SEVERE, player.getName()+"无法获取钓鱼结果 ");
             return null;
         }
-        fish.setFisherman(player.getUniqueId());
         return fish.give(player,-1);
     }
 

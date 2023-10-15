@@ -19,4 +19,6 @@ public class NbtConstant {
 
     public static final String PAGE="page";
 
+    public static final String MODEL="CustomModelData";
+
 }

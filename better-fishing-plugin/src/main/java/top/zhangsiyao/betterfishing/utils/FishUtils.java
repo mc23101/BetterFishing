@@ -38,13 +38,15 @@ public class FishUtils {
             curFish.put(rarity,new ArrayList<>(BetterFishing.globalRarityFishes.get(rarity)));
         }
 
-        if(rod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(rod.getExtraFish())){
-            Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(rod.getExtraFish());
-            for(BRarity r:map.keySet()){
-                if(curFish.containsKey(r)){
-                    curFish.get(r).addAll(map.get(r));
-                }else {
-                    curFish.put(r,new ArrayList<>(map.get(r)));
+        if(rod.getExtraList()!=null&&rod.getExtraList().size()>0&&BetterFishing.extraRarityFishes.containsKey(rod.getExtraFish())){
+            for(String extra:rod.getExtraList()){
+                Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(extra);
+                for(BRarity r:map.keySet()){
+                    if(curFish.containsKey(r)){
+                        curFish.get(r).addAll(map.get(r));
+                    }else {
+                        curFish.put(r,new ArrayList<>(map.get(r)));
+                    }
                 }
             }
         }
@@ -124,7 +126,9 @@ public class FishUtils {
                 .values()
                 .forEach(item -> new BukkitRunnable() {
                     public void run() {
-                        player.getWorld().dropItem(player.getLocation(), item);
+                        if (!item.getType().equals(Material.AIR)) {
+                            player.getWorld().dropItem(player.getLocation(), item);
+                        }
                     }
                 }.runTask(JavaPlugin.getProvidingPlugin(FishUtils.class)));
     }

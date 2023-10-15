@@ -19,4 +19,8 @@ public class RodKey {
     public static final String extra_fish ="extra-fish";
     public static final String fishing_speed = "fishing-speed";
     public static final String double_drop ="double-drop";
+
+    public static final String model="model";
+
+    public static final String extra_list="extra-list";
 }
