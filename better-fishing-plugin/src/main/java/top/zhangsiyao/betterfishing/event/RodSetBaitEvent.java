@@ -25,7 +25,7 @@ public class RodSetBaitEvent implements Listener {
             if(rod!=null&&bait!=null){
                 NBTItem nbtItem=new NBTItem(curr);
                 NBTCompound bfCompound = nbtItem.getOrCreateCompound(NbtConstant.BF_COMPOUND);
-                bfCompound.setString(NbtConstant.USE_BAIT_NAME,bait.getBaitName());
+                bfCompound.setString(NbtConstant.USE_BAIT_NAME,bait.getName());
                 FishUtils.refreshRodLore(nbtItem.getItem());
                 event.setCurrentItem(nbtItem.getItem());
                 event.setCancelled(true);

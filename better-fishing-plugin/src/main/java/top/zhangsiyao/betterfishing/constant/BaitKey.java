@@ -47,5 +47,12 @@ public class BaitKey {
      * */
     public final static String rarity="rarity";
 
+    public static final String  unbreakable="unbreakable";
+
+    /**
+     * 模型
+     * */
+    public final static String model="model";
+
 
 }

@@ -1,6 +1,7 @@
 package top.zhangsiyao.betterfishing.item;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.BaitKey;
+import top.zhangsiyao.betterfishing.constant.FishKey;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
@@ -17,10 +19,12 @@ import top.zhangsiyao.betterfishing.utils.ItemFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Getter
-public class BaitItem implements AbstractItem{
+public class BaitItem extends AbstractItem {
 
     public static BaitItem empty=new BaitItem("无");
 
@@ -28,62 +32,30 @@ public class BaitItem implements AbstractItem{
 
     File file;
 
-    ItemProperties itemProperties;
-
-    String displayName;
-
-    List<String> lore;
-
     List<FishItem> fish;
 
     List<BRarity> rarity;
-
-    Boolean glowing;
-
-    Integer durability;
-
-    String baitName;
 
     Double fishWeight;
 
     Double rarityWeight;
 
-
-
     FileConfiguration baitConfig;
 
-    private BaitItem(String baitName){
-        this.baitName=baitName;
+    private BaitItem(String name){
+        this.name=name;
     }
 
     public BaitItem(String name, FileConfiguration baitConfig,File file) {
-        this.baitName = name;
+        this.name = name;
         this.baitConfig = baitConfig;
         this.file=file;
-        loadFishWeight();
-        loadRarityWeight();
-        loadDisplayName();
-        loadLore();;
-        loadDurability();
-        loadFish();
-        loadItemProperties();
-        loadGlowing();
-        loadRarities();
+        loadConfigs();
         itemFactory=new ItemFactory(this,file);
     }
 
-    public String getDisplayName() {
-        return TextUtils.translateHexColorCodes(displayName==null?baitName:displayName);
-    }
-
-    public List<String> getLore() {
-        List<String> cur=new ArrayList<>();
-        for (String l:lore){
-            cur.add(TextUtils.translateHexColorCodes(l));
-        }
-        return cur;
-    }
-
+    
+    @Override
     public ItemStack give(Player player, int randomIndex) {
         ItemStack bait = itemFactory.createItem(player, randomIndex);
 
@@ -91,7 +63,7 @@ public class BaitItem implements AbstractItem{
 
         if ((baitMeta = bait.getItemMeta()) != null) {
             if (displayName != null) baitMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
-            else baitMeta.setDisplayName(TextUtils.translateHexColorCodes(getBaitName()));
+            else baitMeta.setDisplayName(TextUtils.translateHexColorCodes(name));
 
             baitMeta.setLore(getLore());
 
@@ -105,67 +77,40 @@ public class BaitItem implements AbstractItem{
         return bait;
     }
 
-    private ConfigurationSection getSection(){
-        return baitConfig.getConfigurationSection(BaitKey.bait_root).getConfigurationSection(baitName);
-    }
-
-    private void loadFishWeight(){
-        fishWeight=getSection().getDouble(BaitKey.fish_weight,10.0);
-    }
-
-    private void loadRarityWeight(){
-        rarityWeight=getSection().getDouble(BaitKey.rarity_weight,10.0);
-    }
-
-    private void loadDisplayName(){
-        displayName=getSection().getString(BaitKey.display_name,baitName);
-    }
-
-    private void loadLore(){
-        lore=getSection().getStringList(BaitKey.lore);
-    }
-
-    private void loadDurability(){
-        durability=getSection().getInt(BaitKey.durability,0);
-    }
-
-    private void loadFish(){
-        List<FishItem> fish=new ArrayList<>();
-        for(String fishName:getSection().getStringList(BaitKey.fish)){
+    private void loadConfigs(){
+        ConfigurationSection root = Objects.requireNonNull(baitConfig.getConfigurationSection(BaitKey.bait_root)).getConfigurationSection(name);
+        if (root == null) {
+            return;
+        }
+        fishWeight=root.getDouble(BaitKey.fish_weight,10.0);
+        rarityWeight=root.getDouble(BaitKey.rarity_weight,10.0);
+        displayName=root.getString(BaitKey.display_name,name);
+        lore=root.getStringList(BaitKey.lore);
+        durability=root.getInt(BaitKey.durability,0);
+        List<FishItem> fishItems=new ArrayList<>();
+        for(String fishName:root.getStringList(BaitKey.fish)){
             if(BetterFishing.allFishes.containsKey(fishName)){
-                fish.add(BetterFishing.allFishes.get(fishName));
+                fishItems.add(BetterFishing.allFishes.get(fishName));
             }else {
-                throw new RuntimeException(file.getPath()+"中的"+baitName+".fish："+fishName+"该鱼不存在");
+                throw new RuntimeException(file.getPath()+"中的"+name+".fish："+fishName+"该鱼不存在");
             }
         }
-        this.fish=fish;
-    }
-
-    private void loadItemProperties(){
-        itemProperties=new ItemProperties(BaitKey.bait_root,baitName,baitConfig);
-    }
-
-    private void loadGlowing(){
-        glowing=getSection().getBoolean(BaitKey.glowing,false);
-    }
-
-
-    private void loadRarities(){
+        fish=fishItems;
+        itemProperties=new ItemProperties(BaitKey.bait_root,name,baitConfig);
+        glowing=root.getBoolean(BaitKey.glowing,false);
         List<BRarity> rarities=new ArrayList<>();
-        for(String rarityName:getSection().getStringList(BaitKey.rarity)){
+        for(String rarityName:root.getStringList(BaitKey.rarity)){
             if(BetterFishing.rarityMap.containsKey(rarityName)){
                 rarities.add(BetterFishing.rarityMap.get(rarityName));
             }else{
-                throw new RuntimeException(file.getPath()+"中的"+baitName+"rarity："+rarityName+"该稀有度不存在");
+                throw new RuntimeException(file.getPath()+"中的"+name+"rarity："+rarityName+"该稀有度不存在");
             }
         }
         rarity=rarities;
-    }
-
-    @Override
-    public String toString() {
-        return "BaitItem{" +
-                ", rarity=" + rarity +
-                '}';
+        model=root.getInt(BaitKey.model);
+        unbreakable=root.getBoolean(BaitKey.unbreakable,false);
+        if (root.contains(BaitKey.model)) {
+            model=root.getInt(BaitKey.model);
+        }
     }
 }

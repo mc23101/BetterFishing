@@ -26,5 +26,9 @@ public class FishKey {
 
     public final static String rarity="rarity";
 
+    public static final String  unbreakable="unbreakable";
+
     public final static String interact_type="interact-event-random";
+
+    public final static String model="model";
 }

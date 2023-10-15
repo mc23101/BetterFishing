@@ -1,22 +1,16 @@
 package top.zhangsiyao.betterfishing.fishing;
 
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FishHook;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityEnterBlockEvent;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.projectiles.ProjectileSource;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.MessageKey;
 import top.zhangsiyao.betterfishing.event.FishTitleEvent;
@@ -25,11 +19,13 @@ import top.zhangsiyao.betterfishing.item.Rod;
 import top.zhangsiyao.betterfishing.utils.FishUtils;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FishingTitleEvent implements Listener {
 
-    public static Map<UUID,Boolean> sentActionBar=new HashMap<>();
+    public static  Map<UUID,Boolean> sentActionBar=new ConcurrentHashMap<>();
 
     public static Thread sectionBar;
 
@@ -44,15 +40,22 @@ public class FishingTitleEvent implements Listener {
                 for(UUID uuid:sentActionBar.keySet()){
                     Player player= Bukkit.getPlayer(uuid);
                     if(sentActionBar.get(uuid).equals(true)&&player != null && player.isOnline()){
-                        TextComponent textComponent=new TextComponent();
                         ItemStack itemStack=player.getInventory().getItemInMainHand();
-                        Rod rod= FishUtils.getRod(itemStack);
-                        BaitItem baitItem=FishUtils.getBaitByRod(itemStack);
-                        baitItem=baitItem==null?BaitItem.empty:baitItem;
-                        textComponent.setText(TextUtils.parseTest(BetterFishing.messageConfig.get(MessageKey.fishing_actionbar_message),rod,baitItem));
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,textComponent);
-                    }else {
-                        sentActionBar.remove(uuid);
+                        if(itemStack.getType().equals(Material.FISHING_ROD)){
+                            TextComponent textComponent=new TextComponent();
+                            Rod rod= FishUtils.getRod(itemStack);
+                            if(rod!=null){
+                                BaitItem baitItem=FishUtils.getBaitByRod(itemStack);
+                                baitItem=baitItem==null?BaitItem.empty:baitItem;
+                                textComponent.setText(TextUtils.parseTest(BetterFishing.messageConfig.get(MessageKey.fishing_actionbar_message),rod,baitItem));
+                                player.spigot().sendMessage(ChatMessageType.ACTION_BAR,textComponent);
+                                continue;
+                            }
+                        }
+                    }
+                    sentActionBar.remove(uuid);
+                    if(player!=null&&player.isOnline()){
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(""));
                     }
                 }
             }

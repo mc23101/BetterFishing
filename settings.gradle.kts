@@ -45,7 +45,6 @@ dependencyResolutionManagement {
             library("headdatabase-api", "com.arcaniax:HeadDatabase-API:1.3.1")
             library("griefprevention", "com.github.TechFortress:GriefPrevention:16.17.1")//We must use 16.17.1 until we upgrade to java 17
             library("caffeine", "com.github.ben-manes.caffeine:caffeine:2.9.3")//We must use 2.9.3 until we upgrade to java 17
-
             library("itemsadder-api", "com.github.LoneDev6:API-ItemsAdder:3.5.0b")
             library("nbt-api", "de.tr7zw:item-nbt-api:2.11.3")
             library("denizens-api", "com.denizenscript:denizen:1.2.5-SNAPSHOT") // We must use 1.2.6 until we upgrade to java 17

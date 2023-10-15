@@ -83,8 +83,7 @@ public class FishFile {
             if(BetterFishing.extraRarityFishes.containsKey(name)){
                 throw new RuntimeException(file.getPath()+"中的name："+name+"的值已被占用，请更换其他值");
             }
-
-            Map<BRarity, List<FishItem>> map=new HashMap<>();
+            Map<BRarity, List<FishItem>> map = new HashMap<>();
             for(String fishName:fileConfiguration.getConfigurationSection("fish").getKeys(false)){
                 if(BetterFishing.allFishes.containsKey(fishName)){
                     throw new RuntimeException(file.getPath()+"中的掉落物"+ fishName+ "名称已被占用，请更换其他名称");

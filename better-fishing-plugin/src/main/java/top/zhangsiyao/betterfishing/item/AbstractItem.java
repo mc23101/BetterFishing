@@ -1,22 +1,64 @@
 package top.zhangsiyao.betterfishing.item;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import lombok.Data;
+import top.zhangsiyao.betterfishing.utils.TextUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface AbstractItem {
-    ItemProperties getItemProperties();
+@Data
+public abstract class AbstractItem implements IItem{
 
-    List<String> getLore();
+    Integer model;
 
-    Integer getDurability();
+    ItemProperties itemProperties;
 
-    String getDisplayName();
+    String displayName;
 
-    Boolean getGlowing();
+    List<String> lore;
 
-    ItemStack give(Player player, int randomIndex);
+    Boolean glowing;
 
+    Integer durability=0;
+
+    Boolean unbreakable=false;
+
+    String name;
+
+
+    @Override
+    public final ItemProperties getItemProperties() {
+        return itemProperties;
+    }
+
+    @Override
+    public final List<String> getLore() {
+        List<String> cur=new ArrayList<>();
+        for (String l:lore){
+            cur.add(TextUtils.translateHexColorCodes(l));
+        }
+        return cur;
+    }
+
+    @Override
+    public final Integer getDurability() {
+        return durability;
+    }
+
+    @Override
+    public final String getDisplayName() {
+        return TextUtils.translateHexColorCodes(displayName==null?name:displayName);
+    }
+
+    @Override
+    public final Boolean getGlowing() {
+        return glowing;
+    }
+
+
+    @Override
+    public final Boolean getUnbreakable() {
+        return unbreakable;
+    }
 
 }

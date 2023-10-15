@@ -39,16 +39,19 @@ public class FishingNoneBaitProcessor implements Listener {
             return;
         }
 
+        double mu=rod.getMutualityExp()==null?1.0:rod.getMutualityExp();
+        event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
         int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
         if(rod.getFishingSpeed() != null){
-            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
-            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-Float.parseFloat(rod.getFishingSpeed())));
+            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
+            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
+
 
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
@@ -65,7 +68,7 @@ public class FishingNoneBaitProcessor implements Listener {
             if (rod.getDoubleDrop() != null) {
                 Random rand = new Random();
                 float randDouble = rand.nextFloat();
-                if (randDouble <= Float.parseFloat(rod.getDoubleDrop())) {
+                if (randDouble <= rod.getDoubleDrop()) {
                     fish.setAmount(2);
                     event.getPlayer().sendMessage("恭喜你获得双倍奖励!");
                 }
@@ -99,19 +102,7 @@ public class FishingNoneBaitProcessor implements Listener {
 
         FishItem fish;
 
-        Map<BRarity,List<FishItem>> curFish=new HashMap<>(BetterFishing.globalRarityFishes);
-
-        if(fishingRod.getExtraFish()!=null&&BetterFishing.extraRarityFishes.containsKey(fishingRod.getExtraFish())){
-            Map<BRarity,List<FishItem>> map= BetterFishing.extraRarityFishes.get(fishingRod.getExtraFish());
-            for(BRarity r:map.keySet()){
-                if(curFish.containsKey(r)){
-                    curFish.get(r).addAll(map.get(r));
-                }else {
-                    curFish.put(r,new ArrayList<>(map.get(r)));
-                }
-            }
-        }
-
+        Map<BRarity,List<FishItem>> curFish=FishUtils.getCurFish(fishingRod);
 
         BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet());
         if (fishRarity == null) {
@@ -124,7 +115,6 @@ public class FishingNoneBaitProcessor implements Listener {
             BetterFishing.logger.log(Level.SEVERE, player.getName()+"无法获取钓鱼结果 ");
             return null;
         }
-        fish.setFisherman(player.getUniqueId());
         return fish.give(player,-1);
     }
 

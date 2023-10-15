@@ -16,10 +16,9 @@ public class NbtConstant {
     public static final String USE_BAIT_NAME="use-bait-name";
     public static final String PUBLIC_BUKKIT_VALUES = "PublicBukkitValues";
     public static final String ROD_NAME="rod-name";
-    public static final String EXTRA_FISH="extra-fish";
-    public static final String FISHING_SPEED = "fishing-speed";
-    public static final String DOUBLE_DROP="double-drop";
 
     public static final String PAGE="page";
+
+    public static final String MODEL="CustomModelData";
 
 }

@@ -21,54 +21,56 @@ public class GiveCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args[1].equals("fish")&&args.length==5){
-            String fishName=args[2];
-            String playerName=args[3];
-            int count=Integer.parseInt(args[4]);
-            Player player = Bukkit.getServer().getPlayer(playerName);
-            if(player==null||!player.isOnline()){
-                sender.sendMessage(playerName+"该玩家不在线!");
-                return false;
-            }
-            if(!BetterFishing.allFishes.containsKey(fishName)){
-                sender.sendMessage(fishName+"该鱼不存在在!");
-                return false;
-            }
-            ItemStack give = BetterFishing.allFishes.get(fishName).give(player, -1);
-            give.setAmount(count);
-            player.getInventory().addItem(give);
-            return true;
-        }else if(args[1].equals("bait")&&args.length==5){
-            String baitName=args[2];
-            String playerName=args[3];
-            int count=Integer.parseInt(args[4]);
-            Player player = Bukkit.getServer().getPlayer(playerName);
-            if(player==null||!player.isOnline()){
-                sender.sendMessage(playerName+"该玩家不在线!");
-                return false;
-            }
-            ItemStack give = BetterFishing.baitMap.get(baitName).give(player, -1);
-            give.setAmount(count);
-            player.getInventory().addItem(give);
-            return true;
-        }else if(args[1].equals("rod")&&args.length==4){
-            String rodName=args[2];
-            String playerName=args[3];
-            Player player = Bukkit.getServer().getPlayer(playerName);
-            if(player==null||!player.isOnline()){
-                sender.sendMessage(playerName+"该玩家不在线!");
-                return false;
-            }
-            if(!BetterFishing.rodMap.containsKey(rodName)){
-                sender.sendMessage(rodName+"该鱼竿不存在在");
-                return false;
-            }
-            player.getInventory().addItem(BetterFishing.rodMap.get(rodName).give(player,-1));
-            return true;
-        }else {
+
+        if (args.length > 5 || args.length < 3) {
             sender.sendMessage("指令参数长度异常");
             return false;
         }
+
+        Player player;
+        if (args.length == 4) {
+            String playerName = args[3];
+            player = Bukkit.getServer().getPlayer(playerName);
+        } else {
+            player = (Player) sender;
+        }
+        if (player == null || !player.isOnline()) {
+            sender.sendMessage("该玩家不存在或不在线!");
+            return false;
+        }
+        String itemName = args[2];
+        ItemStack itemStack = null;
+        if (args[1].equals("fish")) {
+            if (!BetterFishing.allFishes.containsKey(itemName)) {
+                sender.sendMessage(itemName + "该鱼不存在在!");
+                return false;
+            }
+            itemStack = BetterFishing.allFishes.get(itemName).give(player, -1);
+        } else if (args[1].equals("bait")) {
+            if (!BetterFishing.baitMap.containsKey(itemName)) {
+                sender.sendMessage("该诱饵不存在");
+                return false;
+            }
+            itemStack = BetterFishing.baitMap.get(itemName).give(player, -1);
+            ;
+        } else if (args[1].equals("rod")) {
+            if (!BetterFishing.rodMap.containsKey(itemName)) {
+                sender.sendMessage("该鱼竿不存在");
+                return false;
+            }
+            itemStack = BetterFishing.rodMap.get(itemName).give(player, -1);
+        } else {
+            sender.sendMessage("你指定的物品分类不存在！");
+            return false;
+        }
+
+        int count = 1;
+        if (args.length == 5) {
+            count = Integer.parseInt(args[4]);
+        }
+        itemStack.setAmount(count);
+        player.getInventory().addItem(itemStack);
+        return true;
     }
 
 
