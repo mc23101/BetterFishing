@@ -8,7 +8,7 @@ import top.zhangsiyao.betterfishing.item.BRarity;
 import java.io.File;
 import java.io.IOException;
 
-public class RaritiesFile {
+public class RaritiesFile implements FileConfig{
 
     private final BetterFishing plugin;
     private FileConfiguration raritiesConfig;

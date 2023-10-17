@@ -9,17 +9,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import top.zhangsiyao.betterfishing.command.Command;
 import top.zhangsiyao.betterfishing.config.*;
 import top.zhangsiyao.betterfishing.event.*;
-import top.zhangsiyao.betterfishing.fishing.FishingBaitProcessor;
-import top.zhangsiyao.betterfishing.fishing.FishingNoneBaitProcessor;
+import top.zhangsiyao.betterfishing.fishing.FishingProcessor;
 import top.zhangsiyao.betterfishing.fishing.FishingTitleEvent;
 import top.zhangsiyao.betterfishing.gui.BaitGui;
 import top.zhangsiyao.betterfishing.gui.FishGui;
 import top.zhangsiyao.betterfishing.gui.FishItemsGui;
 import top.zhangsiyao.betterfishing.gui.RodGui;
-import top.zhangsiyao.betterfishing.item.BRarity;
-import top.zhangsiyao.betterfishing.item.BaitItem;
-import top.zhangsiyao.betterfishing.item.FishItem;
-import top.zhangsiyao.betterfishing.item.Rod;
+import top.zhangsiyao.betterfishing.item.*;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -41,14 +37,18 @@ public class BetterFishing extends JavaPlugin {
     // 鱼竿配置文件
     public static RodFile rodFile;
 
+    public static AttachmentFile attachmentFile;
+
+    public static AttachmentSlotFile attachmentSlotFile;
 
     public static ConfigFile configFile;
 
     public static MessageFile messageConfig;
 
-    /**
-     *
-     * */
+    public static Map<String, AttachmentSlot> attachmentSlots;
+
+    public static Map<String,Attachment> attachments;
+
     public static Map<String, FishItem> globalFishes;
 
     public static Map<String,FishItem> extraFishes;
@@ -119,8 +119,7 @@ public class BetterFishing extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RodPrepareEnchantEvent(),this);
         getServer().getPluginManager().registerEvents(new BaitItemCraftEvent(),this);
         getServer().getPluginManager().registerEvents(new RodGui(),this);
-        getServer().getPluginManager().registerEvents(new FishingNoneBaitProcessor(), this);
-        getServer().getPluginManager().registerEvents(new FishingBaitProcessor(),this);
+        getServer().getPluginManager().registerEvents(new FishingProcessor(),this);
         getServer().getPluginManager().registerEvents(new FishInteractEvent(),this);
         getServer().getPluginManager().registerEvents(new FishGui(),this);
         getServer().getPluginManager().registerEvents(new FishingTitleEvent(),this);
@@ -183,6 +182,8 @@ public class BetterFishing extends JavaPlugin {
         baitFile = new BaitFile(this);
         rodFile=new RodFile(this);
         messageConfig=new MessageFile(this);
+        attachmentSlotFile=new AttachmentSlotFile(this);
+        attachmentFile=new AttachmentFile(this);
         logger.log(Level.INFO,"加载鱼"+allFishes.size()+"个");
         logger.log(Level.INFO,"加载稀有度"+rarityMap.size()+"个");
         logger.log(Level.INFO,"加载鱼饵"+baitMap.size()+"个");
@@ -221,17 +222,19 @@ public class BetterFishing extends JavaPlugin {
         globalRarityFishes=new HashMap<>();
         allFishes=new HashMap<>();
         baitMap=new HashMap<>();
-
+        attachmentSlots=new HashMap<>();
+        attachments=new HashMap<>();
         competitionWorlds=new ArrayList<>();
 
 
     }
 
 
-    private boolean setupPermissions() {
+    private void setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        permission = rsp.getProvider();
-        return permission != null;
+        if (rsp != null) {
+            permission = rsp.getProvider();
+        }
     }
 
     /**

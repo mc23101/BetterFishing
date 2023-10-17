@@ -9,7 +9,7 @@ import top.zhangsiyao.betterfishing.item.BaitItem;
 import java.io.File;
 import java.io.IOException;
 
-public class BaitFile {
+public class BaitFile implements FileConfig{
 
     private final BetterFishing plugin;
     private FileConfiguration baitConfig;

@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RodFile {
+public class RodFile implements FileConfig{
 
     private final BetterFishing plugin;
     private FileConfiguration rodConfig;

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageFile {
+public class MessageFile implements FileConfig{
 
     private final BetterFishing plugin;
 
