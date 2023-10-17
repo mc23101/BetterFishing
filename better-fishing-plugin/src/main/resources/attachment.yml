@@ -1,0 +1,13 @@
+attachment:
+  displayName: "超级鱼钩"
+  slot: "hook"
+  item:
+    material: DIAMOND
+  model: 1004
+  glowing: true
+  fish:
+    - name: "fish1"
+      weight: 10
+  rarity:
+    - name: "common"
+      weight: 10

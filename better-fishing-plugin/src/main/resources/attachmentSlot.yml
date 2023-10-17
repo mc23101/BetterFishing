@@ -1,0 +1,7 @@
+attachmentSlot:
+  # 鱼钩配件槽
+  hook:
+    displayName: "鱼钩"
+  # 配件槽
+  a:
+    displayName: "测试1槽"

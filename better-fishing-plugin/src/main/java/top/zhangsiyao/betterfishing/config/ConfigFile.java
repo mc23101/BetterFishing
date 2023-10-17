@@ -12,12 +12,12 @@ import top.zhangsiyao.betterfishing.BetterFishing;
 import java.util.List;
 import java.util.logging.Level;
 
-public class MainConfig {
+public class ConfigFile {
 
     private final BetterFishing plugin;
     private FileConfiguration config;
 
-    public MainConfig(BetterFishing plugin) {
+    public ConfigFile(BetterFishing plugin) {
         this.plugin = plugin;
         reload();
     }

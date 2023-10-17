@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageConfig {
+public class MessageFile {
 
     private final BetterFishing plugin;
 
     private FileConfiguration messageConfig;
 
-    public MessageConfig(BetterFishing plugin) {
+    public MessageFile(BetterFishing plugin) {
         this.plugin = plugin;
         reload();
     }

@@ -42,9 +42,9 @@ public class BetterFishing extends JavaPlugin {
     public static RodFile rodFile;
 
 
-    public static MainConfig mainConfig;
+    public static ConfigFile configFile;
 
-    public static MessageConfig messageConfig;
+    public static MessageFile messageConfig;
 
     /**
      *
@@ -97,6 +97,8 @@ public class BetterFishing extends JavaPlugin {
 
         listeners();
         commands();
+
+        new PlaceholderReceiver(this).register();
 
         logger.log(Level.INFO, "BetterFishing 插件启动成功！");
     }
@@ -175,12 +177,12 @@ public class BetterFishing extends JavaPlugin {
         saveDefaultConfig();
         reloadConfig();
         //加载配置文件
-        mainConfig = new MainConfig(this);
+        configFile = new ConfigFile(this);
         raritiesFile = new RaritiesFile(this);
         fishFile = new FishFile(this);
         baitFile = new BaitFile(this);
         rodFile=new RodFile(this);
-        messageConfig=new MessageConfig(this);
+        messageConfig=new MessageFile(this);
         logger.log(Level.INFO,"加载鱼"+allFishes.size()+"个");
         logger.log(Level.INFO,"加载稀有度"+rarityMap.size()+"个");
         logger.log(Level.INFO,"加载鱼饵"+baitMap.size()+"个");

@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 
-public class FishingBaitProcessor implements Listener {
+public class FishingProcessor implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void process(PlayerFishEvent event) {
@@ -36,12 +36,9 @@ public class FishingBaitProcessor implements Listener {
         if(rod==null){
             return;
         }
-
-
         if(!FishUtils.useBait(rodInHand)){
             return;
         }
-
         double mu=rod.getMutualityExp()==null?1.0:rod.getMutualityExp();
         event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
@@ -55,13 +52,10 @@ public class FishingBaitProcessor implements Listener {
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
         BaitItem bait=FishUtils.getBaitByRod(rodInHand);
-
-
         if(bait==null){
             Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
             return;
         }
-
         ItemStack baitItemStack= FishUtils.getBait(event.getPlayer(), bait.getName());
         if(baitItemStack.getType().equals(Material.AIR)){
             event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getName()));

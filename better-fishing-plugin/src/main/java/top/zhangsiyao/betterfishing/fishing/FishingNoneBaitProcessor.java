@@ -43,11 +43,11 @@ public class FishingNoneBaitProcessor implements Listener {
         event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
         // 判断鱼竿有没有时间加成
-        int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
-        int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
+        int maxTime= BetterFishing.configFile.getFishingMaxWaitTime();
+        int minTime= BetterFishing.configFile.getFishingMinWaitTime();
         if(rod.getFishingSpeed() != null){
-            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
-            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
+            maxTime= (int)Math.floor(BetterFishing.configFile.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
+            minTime=(int)Math.floor(BetterFishing.configFile.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
@@ -92,7 +92,7 @@ public class FishingNoneBaitProcessor implements Listener {
      * */
     private static ItemStack getRandomFish(Player player, Location location,Rod fishingRod){
 
-        if (!FishUtils.checkRegion(location, BetterFishing.mainConfig.getAllowedRegions())) {
+        if (!FishUtils.checkRegion(location, BetterFishing.configFile.getAllowedRegions())) {
             return null;
         }
 

@@ -238,12 +238,12 @@ public class FishUtils {
 
     public static boolean checkWorld(Location l) {
         // if the user has defined a world whitelist
-        if (!BetterFishing.mainConfig.worldWhitelist()) {
+        if (!BetterFishing.configFile.worldWhitelist()) {
             return true;
         }
 
         // Gets a list of user defined regions
-        List<String> whitelistedWorlds = BetterFishing.mainConfig.getAllowedWorlds();
+        List<String> whitelistedWorlds = BetterFishing.configFile.getAllowedWorlds();
         if (l.getWorld() == null) {
             return false;
         } else {
