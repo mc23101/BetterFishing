@@ -187,6 +187,8 @@ public class BetterFishing extends JavaPlugin {
         logger.log(Level.INFO,"加载鱼"+allFishes.size()+"个");
         logger.log(Level.INFO,"加载稀有度"+rarityMap.size()+"个");
         logger.log(Level.INFO,"加载鱼饵"+baitMap.size()+"个");
+        logger.log(Level.INFO,"加载配件槽"+attachmentSlots.size()+"个");
+        logger.log(Level.INFO,"加载配件"+attachments.size()+"个");
     }
 
     /**

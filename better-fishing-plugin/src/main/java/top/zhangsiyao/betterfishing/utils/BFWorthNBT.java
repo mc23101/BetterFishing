@@ -5,6 +5,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
+import top.zhangsiyao.betterfishing.item.Attachment;
 import top.zhangsiyao.betterfishing.item.BaitItem;
 import top.zhangsiyao.betterfishing.item.FishItem;
 import top.zhangsiyao.betterfishing.item.Rod;
@@ -32,5 +33,14 @@ public class BFWorthNBT {
         bfCompound.setString(NbtConstant.ROD_NAME,rod.getName());
         return nbtItem.getItem();
     }
+
+    public static ItemStack setAttachmentNBT(ItemStack itemStack, Attachment attachment){
+        NBTItem nbtItem=new NBTItem(itemStack);
+        NBTCompound bfCompound=nbtItem.getOrCreateCompound(NbtConstant.BF_COMPOUND);
+        bfCompound.setString(NbtConstant.BF_ATTACHMENT_NAME,attachment.getName());
+        return nbtItem.getItem();
+    }
+
+
 
 }

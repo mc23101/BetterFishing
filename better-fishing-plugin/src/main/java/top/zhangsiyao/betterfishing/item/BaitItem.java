@@ -77,7 +77,7 @@ public class BaitItem extends AbstractItem {
         return bait;
     }
 
-    private void loadConfigs(){
+    void loadConfigs(){
         ConfigurationSection root = Objects.requireNonNull(baitConfig.getConfigurationSection(BaitKey.bait_root)).getConfigurationSection(name);
         if (root == null) {
             return;

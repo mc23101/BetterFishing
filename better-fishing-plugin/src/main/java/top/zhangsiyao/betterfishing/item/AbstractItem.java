@@ -1,8 +1,11 @@
 package top.zhangsiyao.betterfishing.item;
 
 import lombok.Data;
+import org.bukkit.configuration.file.FileConfiguration;
+import top.zhangsiyao.betterfishing.constant.AttachmentKey;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,14 @@ public abstract class AbstractItem implements IItem{
 
     String name;
 
+
+    protected AbstractItem(String root,String name, File file, FileConfiguration configuration){
+        itemProperties=new ItemProperties(root,name,configuration);
+    }
+
+    protected AbstractItem(){
+
+    }
 
     @Override
     public final ItemProperties getItemProperties() {
@@ -60,5 +71,7 @@ public abstract class AbstractItem implements IItem{
     public final Boolean getUnbreakable() {
         return unbreakable;
     }
+
+    abstract void loadConfigs();
 
 }

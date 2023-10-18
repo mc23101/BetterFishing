@@ -86,7 +86,7 @@ public class FishItem  extends AbstractItem {
     }
 
 
-    private void loadConfigs(){
+    void loadConfigs(){
         ConfigurationSection root = Objects.requireNonNull(fishConfig.getConfigurationSection(FishKey.root)).getConfigurationSection(name);
         if(root==null){
             return;
