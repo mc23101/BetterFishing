@@ -19,10 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
-import top.zhangsiyao.betterfishing.item.BRarity;
-import top.zhangsiyao.betterfishing.item.BaitItem;
-import top.zhangsiyao.betterfishing.item.FishItem;
-import top.zhangsiyao.betterfishing.item.Rod;
+import top.zhangsiyao.betterfishing.item.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +88,26 @@ public class FishUtils {
         }
         NBTItem nbtItem=new NBTItem(itemStack);
         return NbtUtils.hasKey(nbtItem, NbtConstant.BF_BAIT_NAME);
+    }
+
+    public static boolean isAttachment(ItemStack itemStack){
+        if(itemStack==null||itemStack.getType().equals(Material.AIR)){
+            return false;
+        }
+        NBTItem nbtItem=new NBTItem(itemStack);
+        return NbtUtils.hasKey(nbtItem, NbtConstant.BF_ATTACHMENT_NAME);
+    }
+
+    public static Attachment getAttachment(ItemStack itemStack){
+        if (itemStack==null||itemStack.getType().equals(Material.AIR)){
+            return null;
+        }
+        NBTItem nbtItem=new NBTItem(itemStack);
+        if(!isAttachment(itemStack)||BetterFishing.attachments.containsKey(NbtUtils.getString(nbtItem,NbtConstant.BF_ATTACHMENT_NAME))){
+            return null;
+        }else {
+            return BetterFishing.attachments.get(NbtUtils.getString(nbtItem,NbtConstant.BF_ATTACHMENT_NAME));
+        }
     }
 
     public static BaitItem getBait(ItemStack baitItemstack){
