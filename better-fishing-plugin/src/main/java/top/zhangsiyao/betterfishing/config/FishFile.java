@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class FishFile {
+public class FishFile implements FileConfig{
 
     private final BetterFishing plugin;
     private FileConfiguration fishConfig;

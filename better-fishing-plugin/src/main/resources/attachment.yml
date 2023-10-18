@@ -1,0 +1,19 @@
+attachment:
+  hook1:
+    displayName: "超级鱼钩"
+    slot: "hook"
+    item:
+      material: DIAMOND
+    lore:
+      - "这是一个超级鱼钩"
+    model: 1004
+    glowing: true
+    mutuality_exp: 3
+    fishing_speed: 0
+    double_drop: 0
+    unbreakable: false
+    durability: 800
+    fish:
+      fish1: 10
+    rarities:
+      common: 10

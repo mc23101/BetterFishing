@@ -39,7 +39,7 @@ public class GiveCommand implements CommandExecutor {
             return false;
         }
         String itemName = args[2];
-        ItemStack itemStack = null;
+        ItemStack itemStack;
         if (args[1].equals("fish")) {
             if (!BetterFishing.allFishes.containsKey(itemName)) {
                 sender.sendMessage(itemName + "该鱼不存在在!");
@@ -52,14 +52,19 @@ public class GiveCommand implements CommandExecutor {
                 return false;
             }
             itemStack = BetterFishing.baitMap.get(itemName).give(player, -1);
-            ;
         } else if (args[1].equals("rod")) {
             if (!BetterFishing.rodMap.containsKey(itemName)) {
                 sender.sendMessage("该鱼竿不存在");
                 return false;
             }
             itemStack = BetterFishing.rodMap.get(itemName).give(player, -1);
-        } else {
+        }else if(args[1].equals("attachment")){
+            if (!BetterFishing.attachments.containsKey(itemName)) {
+                sender.sendMessage("该鱼竿不存在");
+                return false;
+            }
+            itemStack = BetterFishing.attachments.get(itemName).give(player, -1);
+        }else {
             sender.sendMessage("你指定的物品分类不存在！");
             return false;
         }

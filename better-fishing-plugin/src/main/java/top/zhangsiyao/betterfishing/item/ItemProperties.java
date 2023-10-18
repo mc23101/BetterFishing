@@ -48,8 +48,8 @@ public class ItemProperties implements Serializable {
      * */
     String potion;
 
-    String fishName;
-    FileConfiguration fishConfig;
+    String name;
+    FileConfiguration config;
 
     String prefix;
 
@@ -57,9 +57,9 @@ public class ItemProperties implements Serializable {
         materials=new ArrayList<>();
     }
 
-    public ItemProperties(String prefix,String name, FileConfiguration fishConfig) {
-        this.fishName = name;
-        this.fishConfig = fishConfig;
+    public ItemProperties(String prefix,String name, FileConfiguration config) {
+        this.name = name;
+        this.config = config;
         this.prefix=prefix;
         loadMaterial();
         loadHead64();
@@ -71,7 +71,7 @@ public class ItemProperties implements Serializable {
     }
 
     private ConfigurationSection getSection(){
-         return Objects.requireNonNull(fishConfig.getConfigurationSection(prefix)).getConfigurationSection(fishName).getConfigurationSection(ItemPropertiesKey.root);
+         return Objects.requireNonNull(config.getConfigurationSection(prefix)).getConfigurationSection(name).getConfigurationSection(ItemPropertiesKey.root);
     }
 
     private void loadMaterial(){
@@ -112,8 +112,8 @@ public class ItemProperties implements Serializable {
                 ", rawMaterial='" + rawMaterial + '\'' +
                 ", materials=" + materials +
                 ", potion='" + potion + '\'' +
-                ", fishName='" + fishName + '\'' +
-                ", fishConfig=" + fishConfig +
+                ", name='" + name + '\'' +
+                ", config=" + config +
                 '}';
     }
 }

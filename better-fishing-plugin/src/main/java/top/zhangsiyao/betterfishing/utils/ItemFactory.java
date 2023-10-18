@@ -1,6 +1,5 @@
 package top.zhangsiyao.betterfishing.utils;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -231,7 +230,7 @@ public class ItemFactory {
         if (predefinedDamage >= 0 && predefinedDamage <= 100) {
             product.setDurability((short) (predefinedDamage / 100.0 * product.getType().getMaxDurability()));
         } else {
-            if (BetterFishing.mainConfig.doingRandomDurability()) {
+            if (BetterFishing.configFile.doingRandomDurability()) {
                 int max = product.getType().getMaxDurability();
                 product.setDurability((short) (BetterFishing.getInstance().getRandom().nextInt() * (max + 1)));
             }

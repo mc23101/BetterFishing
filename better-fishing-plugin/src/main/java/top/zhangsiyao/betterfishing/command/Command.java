@@ -65,15 +65,18 @@ public class Command implements CommandExecutor , TabCompleter {
             return new ArrayList<>(Arrays.asList("give","gui","shop","reload","info"));
         }else if(args[0].equals("give")&&player.isOp()){
             if(args.length==2){
-                return new ArrayList<>(Arrays.asList("rod","bait","fish"));
+                return new ArrayList<>(Arrays.asList("rod","bait","fish","attachment"));
             }
             if(args.length==3){
-                if (args[1].equals("rod")){
-                    return new ArrayList<>(BetterFishing.rodMap.keySet());
-                }else if(args[1].equals("bait")){
-                    return new ArrayList<>(BetterFishing.baitMap.keySet());
-                }else if(args[1].equals("fish")){
-                    return new ArrayList<>(BetterFishing.allFishes.keySet());
+                switch (args[1]) {
+                    case "rod":
+                        return new ArrayList<>(BetterFishing.rodMap.keySet());
+                    case "bait":
+                        return new ArrayList<>(BetterFishing.baitMap.keySet());
+                    case "fish":
+                        return new ArrayList<>(BetterFishing.allFishes.keySet());
+                    case "attachment":
+                        return new ArrayList<>(BetterFishing.attachments.keySet());
                 }
             }
         }else if(args[0].equals("gui")){

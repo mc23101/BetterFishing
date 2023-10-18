@@ -4,7 +4,7 @@ baits:
     # 测试鱼饵的显示标签
     displayName: "测试鱼饵"
     # itemsaddr插件的模型
-    model: "default"
+    model: 1
     # 鱼的材质信息
     # 以下材质信息,正常情况下只会生效一个，
     # 特殊情况会要求配置两个参数，例如：药水

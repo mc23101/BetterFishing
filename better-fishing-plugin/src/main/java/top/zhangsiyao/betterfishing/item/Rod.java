@@ -29,18 +29,18 @@ public class Rod extends AbstractItem {
 
     Double mutualityExp=1.0;
 
+    ItemFactory itemFactory;
+
+    Map<String,Integer> rarities=new HashMap<>();
+
     String extraFish;
     Set<String> extraList=new HashSet<>();
-
-    ItemFactory itemFactory;
 
     FileConfiguration rodConfig;
 
     File file;
 
-    Map<String, String> nbt=new HashMap<>();
 
-    Map<String,Integer> rarities=new HashMap<>();
 
     public Rod(String name, FileConfiguration rodConfig, File file) {
         this.name=name;
@@ -80,7 +80,7 @@ public class Rod extends AbstractItem {
 
 
 
-    private void loadConfigs(){
+    void loadConfigs(){
         ConfigurationSection root = Objects.requireNonNull(rodConfig.getConfigurationSection(RodKey.rod_root)).getConfigurationSection(name);
         if(root==null){
             return;

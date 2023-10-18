@@ -26,49 +26,34 @@ import java.util.*;
 import java.util.logging.Level;
 
 
-public class FishingBaitProcessor implements Listener {
+public class FishingProcessor implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void process(PlayerFishEvent event) {
         ItemStack rodInHand = event.getPlayer().getInventory().getItemInMainHand();
-        FishUtils.refreshRodLore(rodInHand);
         Rod rod=FishUtils.getRod(rodInHand);
         if(rod==null){
             return;
         }
-        if(!FishUtils.useBait(rodInHand)){
-            return;
-        }
+
         double mu=rod.getMutualityExp()==null?1.0:rod.getMutualityExp();
         event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
         // 判断鱼竿有没有时间加成
-        int maxTime= BetterFishing.mainConfig.getFishingMaxWaitTime();
-        int minTime= BetterFishing.mainConfig.getFishingMinWaitTime();
+        int maxTime= BetterFishing.configFile.getFishingMaxWaitTime();
+        int minTime= BetterFishing.configFile.getFishingMinWaitTime();
         if(rod.getFishingSpeed() != null){
-            maxTime= (int)Math.floor(BetterFishing.mainConfig.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
-            minTime=(int)Math.floor(BetterFishing.mainConfig.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
+            maxTime= (int)Math.floor(BetterFishing.configFile.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
+            minTime=(int)Math.floor(BetterFishing.configFile.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
-        BaitItem bait=FishUtils.getBaitByRod(rodInHand);
-        if(bait==null){
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
-            return;
-        }
-        ItemStack baitItemStack= FishUtils.getBait(event.getPlayer(), bait.getName());
-        if(baitItemStack.getType().equals(Material.AIR)){
-            event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getName()));
-            NBTItem nbtItem=new NBTItem(rodInHand,true);
-            NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
-            FishUtils.refreshRodLore(rodInHand);
-            Bukkit.getServer().getPluginManager().callEvent(new PlayerFishEvent(event.getPlayer(), event.getCaught(), event.getHook(),event.getState()));
-            return;
-        }
+
+
         ItemStack fish = null;
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
+            BaitItem bait=FishUtils.getBaitByRod(rodInHand);
 
-            baitItemStack.setAmount(baitItemStack.getAmount() - 1);
 
             // 获取掉到的鱼
             fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(), rod,bait);
@@ -97,6 +82,23 @@ public class FishingBaitProcessor implements Listener {
                     nonCustom.setItemStack(fish);
                 }
             }
+
+            // 如果有鱼饵，鱼饵数量减少，否则刷新lore
+            ItemStack baitItemStack=new ItemStack(Material.AIR);
+            if(bait!=null){
+                baitItemStack=FishUtils.getBait(event.getPlayer(), bait.getName());
+            }
+            if(!baitItemStack.getType().equals(Material.AIR)){
+                baitItemStack.setAmount(baitItemStack.getAmount() - 1);
+            }
+            if(baitItemStack.getType().equals(Material.AIR)||baitItemStack.getAmount()==0){
+                if(bait!=null){
+                    event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getName()));
+                    NBTItem nbtItem=new NBTItem(rodInHand,true);
+                    NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
+                    FishUtils.refreshRodLore(rodInHand);
+                }
+            }
         }
         Bukkit.getServer().getPluginManager().callEvent(new FishTitleEvent(fish,event.getState(),event.getPlayer(),event.getHook()));
     }
@@ -108,7 +110,7 @@ public class FishingBaitProcessor implements Listener {
      * */
     private static ItemStack getRandomFish(Player player, Location location, Rod rod,BaitItem bait){
 
-        if (!FishUtils.checkRegion(location, BetterFishing.mainConfig.getAllowedRegions())) {
+        if (!FishUtils.checkRegion(location, BetterFishing.configFile.getAllowedRegions())) {
             return null;
         }
 
@@ -197,7 +199,7 @@ public class FishingBaitProcessor implements Listener {
         for (double r = Math.random() * totalWeight; idx < allowedRarities.size() - 1; ++idx) {
             BRarity rarity=allowedRarities.get(idx);
             int addWeight=0;
-            if(rod.getRarities().containsKey(rarity.getName())){
+            if(rod!=null&&rod.getRarities().containsKey(rarity.getName())){
                 addWeight+=rod.getRarities().get(rarity.getName());
             }
             if(bait!=null&&bait.getRarity()!=null){

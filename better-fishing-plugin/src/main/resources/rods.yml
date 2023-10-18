@@ -21,6 +21,8 @@ rods:
     mutuality-exp: 2
     # 不可损坏
     unbreakable: false
+    # 耐久度
+    durability: 800
     # 鱼竿是否发光(无属性附魔)
     glowing: true
     # 指定稀有度的增加权重，稀有度必须在rarities.yml中有定义，否则会报错

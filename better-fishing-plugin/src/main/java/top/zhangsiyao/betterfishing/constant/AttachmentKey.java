@@ -1,10 +1,13 @@
 package top.zhangsiyao.betterfishing.constant;
 
-public class RodKey {
+public class AttachmentKey {
+    public final static String root="attachment";
 
-    public static final String rod_root="rods";
+    public final static String displayName="displayName";
 
-    public static final String displayName="displayName";
+    public final static String slot="slot";
+
+    public final static String fish="fish";
 
     public static final String lore="lore";
 
@@ -16,13 +19,10 @@ public class RodKey {
 
     public static final String  unbreakable="unbreakable";
 
-    public static final String extra_fish ="extra-fish";
+    public static final String durability="durability";
+
     public static final String fishing_speed = "fishing-speed";
     public static final String double_drop ="double-drop";
 
-    public static final String durability="durability";
-
     public static final String model="model";
-
-    public static final String extra_list="extra-list";
 }
