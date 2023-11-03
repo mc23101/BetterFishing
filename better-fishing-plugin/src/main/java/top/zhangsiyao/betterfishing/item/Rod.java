@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.RodKey;
 import top.zhangsiyao.betterfishing.utils.BFWorthNBT;
+import top.zhangsiyao.betterfishing.utils.FishUtils;
 import top.zhangsiyao.betterfishing.utils.TextUtils;
 import top.zhangsiyao.betterfishing.utils.ItemFactory;
 
@@ -65,17 +66,13 @@ public class Rod extends AbstractItem {
             if (displayName != null) rodMeta.setDisplayName(TextUtils.translateHexColorCodes(displayName));
             else rodMeta.setDisplayName(TextUtils.translateHexColorCodes(name));
 
-            List<String> newLore=getLore();
-
-            newLore.add(BetterFishing.messageConfig.getRodBaitSlot("无"));
-            rodMeta.setLore(newLore);
-
             rodMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             rodMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             rodMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
             rod.setItemMeta(rodMeta);
             rod = BFWorthNBT.setRodNBT(rod,this);
+            FishUtils.refreshRodLore(rod);
         }
         return rod;
     }

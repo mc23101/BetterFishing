@@ -7,6 +7,10 @@ import java.util.Locale;
 
 public class NbtConstant {
     public static final String BF_COMPOUND = JavaPlugin.getProvidingPlugin(NbtUtils.class).getName().toLowerCase(Locale.ROOT);
+
+
+    public static final String BF_ATTACHMENTS="bf_attachments";
+
     public static final String BF_FISH_NAME = "bf-fish-name";
     public static final String BF_FISH_RANDOM_INDEX = "bf-fish-random-index";
     public static final String BF_BAIT_NAME = "bf-bait-name";

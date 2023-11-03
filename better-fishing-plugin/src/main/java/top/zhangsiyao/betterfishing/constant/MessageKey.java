@@ -4,6 +4,8 @@ public class MessageKey {
 
     public final static String fishing_actionbar_message="fishing-actionbar-message";
 
+    public final static String rod_attachment_count="rod-attachment-count";
+
     public final static String fish_catch_title="fishing-title-fish-catch.title";
     public final static String fish_catch_subtitle="fishing-title-fish-catch.subtitle";
 

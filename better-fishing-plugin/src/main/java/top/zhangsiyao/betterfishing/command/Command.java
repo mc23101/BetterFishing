@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.MessageKey;
+import top.zhangsiyao.betterfishing.gui.RodAttachmentGUI;
+import top.zhangsiyao.betterfishing.utils.FishUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,32 +26,35 @@ public class Command implements CommandExecutor , TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull String[] args) {
-        if(!(sender instanceof Player)){
-            return false;
-        }
-        Player player=(Player) sender;
-        if(args.length>0&&args[0].equals("give")&&player.isOp()){
+        if(args.length>0&&args[0].equals("give")&&sender.isOp()){
             new GiveCommand(plugin).onCommand(sender,command,label,args);
-        }else if(args.length>0&&args[0].equals("gui")&&player.isOp()){
+        }else if(args.length>0&&args[0].equals("gui")&&sender.isOp()){
             new GUICommand(plugin).onCommand(sender,command,label,args);
-        } else if(args.length>0&&args[0].equals("reload")&&player.isOp()){
+        } else if(args.length>0&&args[0].equals("reload")&&sender.isOp()){
             plugin.reload();
-            player.sendMessage("配置文件重新加载成功");
-            player.sendMessage("加载鱼竿："+ BetterFishing.rodMap.size()+"个");
-            player.sendMessage("加载鱼饵："+BetterFishing.baitMap.size()+"个");
-            player.sendMessage("加载fish："+BetterFishing.allFishes.size()+"个");
+            sender.sendMessage("配置文件重新加载成功");
+            sender.sendMessage("加载鱼竿："+ BetterFishing.rodMap.size()+"个");
+            sender.sendMessage("加载鱼饵："+BetterFishing.baitMap.size()+"个");
+            sender.sendMessage("加载fish："+BetterFishing.allFishes.size()+"个");
         }else if(args.length>0&&args[0].equals("info")){
             new InfoCommand(plugin).onCommand(sender,command,label,args);
-        }else if(args.length>0&&args[0].equals("test")){
-            CustomStack stack = CustomStack.getInstance("warrior_sword_shiny");
-            player.sendMessage(String.valueOf(stack==null));
+        }else if(args.length>0&&args[0].equals("attachment")){
+            if(!(sender instanceof Player)){
+                return false;
+            }
+            Player player=(Player) sender;
+            if(FishUtils.isRod(player.getInventory().getItemInMainHand())){
+                player.openInventory(new RodAttachmentGUI(player).getInventory());
+            }else {
+                player.sendMessage("请手持鱼竿！");
+            }
         } else {
             List<String> commandInfo = BetterFishing.messageConfig.getList(MessageKey.command_info);
             StringBuilder message= new StringBuilder();
             for(String m:commandInfo){
                 message.append(m).append("\n");
             }
-            player.sendMessage(message.toString());
+            sender.sendMessage(message.toString());
         }
         return true;
     }
@@ -62,7 +67,7 @@ public class Command implements CommandExecutor , TabCompleter {
         }
         Player player=(Player) sender;
         if(args.length==1){
-            return new ArrayList<>(Arrays.asList("give","gui","shop","reload","info"));
+            return new ArrayList<>(Arrays.asList("give","gui","shop","reload","info","attachment"));
         }else if(args[0].equals("give")&&player.isOp()){
             if(args.length==2){
                 return new ArrayList<>(Arrays.asList("rod","bait","fish","attachment"));

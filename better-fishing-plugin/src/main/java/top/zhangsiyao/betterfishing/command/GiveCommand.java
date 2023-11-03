@@ -26,12 +26,12 @@ public class GiveCommand implements CommandExecutor {
             sender.sendMessage("指令参数长度异常");
             return false;
         }
-
         Player player;
         if (args.length == 4) {
             String playerName = args[3];
             player = Bukkit.getServer().getPlayer(playerName);
         } else {
+
             player = (Player) sender;
         }
         if (player == null || !player.isOnline()) {
@@ -60,7 +60,7 @@ public class GiveCommand implements CommandExecutor {
             itemStack = BetterFishing.rodMap.get(itemName).give(player, -1);
         }else if(args[1].equals("attachment")){
             if (!BetterFishing.attachments.containsKey(itemName)) {
-                sender.sendMessage("该鱼竿不存在");
+                sender.sendMessage("该配件不存在");
                 return false;
             }
             itemStack = BetterFishing.attachments.get(itemName).give(player, -1);

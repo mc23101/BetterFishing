@@ -3,7 +3,7 @@ package top.zhangsiyao.betterfishing.utils;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.inventory.ItemStack;
-import org.omg.CORBA.PUBLIC_MEMBER;
+
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
 import top.zhangsiyao.betterfishing.item.Attachment;
 import top.zhangsiyao.betterfishing.item.BaitItem;

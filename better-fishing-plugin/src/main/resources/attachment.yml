@@ -8,9 +8,9 @@ attachment:
       - "这是一个超级鱼钩"
     model: 1004
     glowing: true
-    mutuality_exp: 3
-    fishing_speed: 0
-    double_drop: 0
+    mutuality-exp: 3
+    fishing-speed: 0
+    double-drop: 0
     unbreakable: false
     durability: 800
     fish:

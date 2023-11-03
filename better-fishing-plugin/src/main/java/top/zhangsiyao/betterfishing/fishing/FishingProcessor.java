@@ -15,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import top.zhangsiyao.betterfishing.BetterFishing;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
 import top.zhangsiyao.betterfishing.event.FishTitleEvent;
-import top.zhangsiyao.betterfishing.item.BRarity;
-import top.zhangsiyao.betterfishing.item.BaitItem;
-import top.zhangsiyao.betterfishing.item.FishItem;
-import top.zhangsiyao.betterfishing.item.Rod;
+import top.zhangsiyao.betterfishing.item.*;
 import top.zhangsiyao.betterfishing.utils.FishUtils;
 import top.zhangsiyao.betterfishing.utils.NbtUtils;
 
@@ -35,16 +32,22 @@ public class FishingProcessor implements Listener {
         if(rod==null){
             return;
         }
+        List<Attachment> attachments=FishUtils.getAttachmentList(rodInHand);
 
         double mu=rod.getMutualityExp()==null?1.0:rod.getMutualityExp();
         event.setExpToDrop((int) (event.getExpToDrop()*mu));
 
+        double fishSpeed=1-rod.getFishingSpeed();
+        for(Attachment attachment:attachments){
+            mu+=attachment.getMutualityExp();
+            fishSpeed-=attachment.getFishingSpeed();
+        }
         // 判断鱼竿有没有时间加成
         int maxTime= BetterFishing.configFile.getFishingMaxWaitTime();
         int minTime= BetterFishing.configFile.getFishingMinWaitTime();
         if(rod.getFishingSpeed() != null){
-            maxTime= (int)Math.floor(BetterFishing.configFile.getFishingMaxWaitTime()*(1-rod.getFishingSpeed()));
-            minTime=(int)Math.floor(BetterFishing.configFile.getFishingMinWaitTime()*(1-rod.getFishingSpeed()));
+            maxTime= (int)Math.floor(BetterFishing.configFile.getFishingMaxWaitTime()*Math.max(fishSpeed,0));
+            minTime=(int)Math.floor(BetterFishing.configFile.getFishingMinWaitTime()*Math.max(fishSpeed,0));
         }
         event.getHook().setMinWaitTime(minTime);
         event.getHook().setMaxWaitTime(maxTime);
@@ -56,7 +59,7 @@ public class FishingProcessor implements Listener {
 
 
             // 获取掉到的鱼
-            fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(), rod,bait);
+            fish = getRandomFish(event.getPlayer(), event.getHook().getLocation(), rod,bait,attachments);
 
 
             if (fish == null) {
@@ -65,9 +68,15 @@ public class FishingProcessor implements Listener {
 
             //判断是否触发双倍奖励
             if (rod.getDoubleDrop() != null) {
+                double doubleDrop=rod.getDoubleDrop();
+                for(Attachment attachment:attachments){
+                    doubleDrop+=(attachment.getDoubleDrop());
+                }
+
+
                 Random rand = new Random();
                 float randDouble = rand.nextFloat();
-                if (randDouble <= rod.getDoubleDrop()) {
+                if (randDouble <= Math.min(doubleDrop,1)) {
                     fish.setAmount(2);
                     event.getPlayer().sendMessage(BetterFishing.messageConfig.getDoubleDropMessage());
                 }
@@ -88,7 +97,7 @@ public class FishingProcessor implements Listener {
             if(bait!=null){
                 baitItemStack=FishUtils.getBait(event.getPlayer(), bait.getName());
             }
-            if(!baitItemStack.getType().equals(Material.AIR)){
+            if(!baitItemStack.getType().equals(Material.AIR)&&baitItemStack.getAmount()>0){
                 baitItemStack.setAmount(baitItemStack.getAmount() - 1);
             }
             if(baitItemStack.getType().equals(Material.AIR)||baitItemStack.getAmount()==0){
@@ -96,9 +105,9 @@ public class FishingProcessor implements Listener {
                     event.getPlayer().sendMessage(BetterFishing.messageConfig.getBaitNotEnoughMessage(bait.getName()));
                     NBTItem nbtItem=new NBTItem(rodInHand,true);
                     NbtUtils.removeNbt(nbtItem,NbtConstant.USE_BAIT_NAME);
-                    FishUtils.refreshRodLore(rodInHand);
                 }
             }
+            FishUtils.refreshRodLore(rodInHand);
         }
         Bukkit.getServer().getPluginManager().callEvent(new FishTitleEvent(fish,event.getState(),event.getPlayer(),event.getHook()));
     }
@@ -108,7 +117,7 @@ public class FishingProcessor implements Listener {
     /**
      * 随机获取钓鱼结果
      * */
-    private static ItemStack getRandomFish(Player player, Location location, Rod rod,BaitItem bait){
+    private static ItemStack getRandomFish(Player player, Location location, Rod rod,BaitItem bait,List<Attachment> attachments){
 
         if (!FishUtils.checkRegion(location, BetterFishing.configFile.getAllowedRegions())) {
             return null;
@@ -121,13 +130,13 @@ public class FishingProcessor implements Listener {
         FishItem fish;
         Map<BRarity,List<FishItem>> curFish=FishUtils.getCurFish(rod);
 
-        BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet(),rod,bait);
+        BRarity fishRarity = randomWeightedRarity(player, 1, null, curFish.keySet(),rod,bait,attachments);
         if (fishRarity == null) {
             BetterFishing.logger.log(Level.SEVERE,  player.getName()+"无法获取稀有度 " );
             return null;
         }
 
-        fish = randomFish(fishRarity, location, player, 1, null,curFish,rod,bait);
+        fish = randomFish(fishRarity, location, player, 1, null,curFish,rod,bait,attachments);
         if (fish == null) {
             BetterFishing.logger.log(Level.SEVERE, player.getName()+"无法获取钓鱼结果 ");
             return null;
@@ -135,7 +144,7 @@ public class FishingProcessor implements Listener {
         return fish.give(player,-1);
     }
 
-    public static FishItem randomFish(BRarity r, Location l, Player p, double boostRate, List<FishItem> boostedFish, Map<BRarity,List<FishItem>> curFish,Rod rod,BaitItem bait) {
+    public static FishItem randomFish(BRarity r, Location l, Player p, double boostRate, List<FishItem> boostedFish, Map<BRarity,List<FishItem>> curFish,Rod rod,BaitItem bait,List<Attachment> attachments) {
         if (r == null) return null;
         // will store all the fish that match the player's biome or don't discriminate biomes
 
@@ -143,7 +152,7 @@ public class FishingProcessor implements Listener {
 
         // 防止/emf admin重载导致插件无法获得稀有性
         if (curFish.get(r) == null)
-            r = randomWeightedRarity(p, 1, null, curFish.keySet(),rod,bait);
+            r = randomWeightedRarity(p, 1, null, curFish.keySet(),rod,bait,attachments);
 
         for (FishItem f : curFish.get(r)) {
 
@@ -163,7 +172,7 @@ public class FishingProcessor implements Listener {
         FishItem returningFish;
 
         // 检查是否需要为鱼做权重计算
-        returningFish = randomWeightedFish(available, boostRate, boostedFish, bait);
+        returningFish = randomWeightedFish(available, boostRate, boostedFish, bait,attachments);
 
         return returningFish;
     }
@@ -171,7 +180,7 @@ public class FishingProcessor implements Listener {
     /**
      * 权重法获取稀有度
      * */
-    public static BRarity randomWeightedRarity(Player fisher, double boostRate, Set<BRarity> boostedRarities, Set<BRarity> totalRarities,Rod rod,BaitItem bait) {
+    public static BRarity randomWeightedRarity(Player fisher, double boostRate, Set<BRarity> boostedRarities, Set<BRarity> totalRarities,Rod rod,BaitItem bait,List<Attachment> attachments) {
 
         int idx = 0;
         List<BRarity> allowedRarities = new ArrayList<>(totalRarities);
@@ -186,6 +195,11 @@ public class FishingProcessor implements Listener {
                 Set<BRarity> addWeightRarity=new HashSet<>(bait.getRarity());
                 if(addWeightRarity.contains(r)){
                     addWeight+=bait.getRarityWeight();
+                }
+            }
+            for(Attachment attachment:attachments){
+                if(attachment.getRarities().containsKey(r.getName())){
+                    addWeight+=attachment.getRarities().get(r.getName());
                 }
             }
 
@@ -208,6 +222,11 @@ public class FishingProcessor implements Listener {
                     addWeight+=bait.getRarityWeight();
                 }
             }
+            for(Attachment attachment:attachments){
+                if(attachment.getRarities().containsKey(rarity.getName())){
+                    addWeight+=attachment.getRarities().get(rarity.getName());
+                }
+            }
             if (boostRate != -1.0 && boostedRarities != null && boostedRarities.contains(rarity)) {
                 r -= (rarity.getWeight()+addWeight) * boostRate;
             } else {
@@ -227,7 +246,7 @@ public class FishingProcessor implements Listener {
     /**
      * 权重法获取钓鱼结果
      * */
-    private static FishItem randomWeightedFish(List<FishItem> fishList, double boostRate, List<FishItem> boostedFish, BaitItem bait) {
+    private static FishItem randomWeightedFish(List<FishItem> fishList, double boostRate, List<FishItem> boostedFish, BaitItem bait,List<Attachment> attachments) {
         double totalWeight = 0;
 
         Set<FishItem> addFishWeight=bait==null?new HashSet<>():new HashSet<>(bait.getFish());
@@ -236,7 +255,12 @@ public class FishingProcessor implements Listener {
 
             double addWeight=0;
             if(addFishWeight.contains(fish)){
-                addWeight=bait.getFishWeight();
+                addWeight+=bait.getFishWeight();
+            }
+            for(Attachment attachment:attachments){
+                if(attachment.getFish().containsKey(fish.getName())){
+                    addWeight+=attachment.getFish().get(fish.getName());
+                }
             }
 
             // when boostRate is -1, we need to guarantee a fish, so the fishList has already been moderated to only contain
@@ -258,6 +282,11 @@ public class FishingProcessor implements Listener {
             double addWeight=0;
             if(addFishWeight.contains(fishList.get(idx))){
                 addWeight=bait.getFishWeight();
+            }
+            for(Attachment attachment:attachments){
+                if(attachment.getFish().containsKey(fishList.get(idx).getName())){
+                    addWeight+=attachment.getFish().get(fishList.get(idx).getName());
+                }
             }
             if ((fishList.get(idx).getWeight()+addWeight) == 0.0d) {
                 if (boostRate != -1 && boostedFish != null && boostedFish.contains(fishList.get(idx))) {

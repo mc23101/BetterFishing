@@ -14,7 +14,6 @@ import top.zhangsiyao.betterfishing.item.Rod;
 import top.zhangsiyao.betterfishing.utils.FishUtils;
 
 public class RodSetBaitEvent implements Listener {
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public static void process(InventoryClickEvent event){
         if(event.getAction()== InventoryAction.SWAP_WITH_CURSOR){

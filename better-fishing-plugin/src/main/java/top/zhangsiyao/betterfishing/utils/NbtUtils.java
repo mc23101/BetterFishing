@@ -5,10 +5,12 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.zhangsiyao.betterfishing.constant.NbtConstant;
+import top.zhangsiyao.betterfishing.item.Attachment;
 
 public class NbtUtils {
 
@@ -32,6 +34,8 @@ public class NbtUtils {
         NBTCompound bfCompound = nbtCompound.getOrCreateCompound(NbtConstant.BF_COMPOUND);
         bfCompound.removeKey(key);
     }
+
+
 
     /**
      * Returns the NBT Version of the item

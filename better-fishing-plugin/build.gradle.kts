@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "top.zhangsiyao.betterfishing"
-version = "1.0.6"
+version = "1.1.0"
 
 description = "一个拥有自定义钓鱼内容的钓鱼插件."
 
